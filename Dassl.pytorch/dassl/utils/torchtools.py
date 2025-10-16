@@ -29,11 +29,12 @@ def save_checkpoint(
     state,
     save_dir,
     is_best=False,
-    remove_module_from_keys=True,
+    remove_module_from_keys=True,  # Jittor无module.前缀，此参数仅兼容
     model_name=""
 ):
     mkdir_if_missing(save_dir)
 
+    # Jittor模型无module.前缀，无需处理state_dict
     if "state_dict" in state:
         pass
 
@@ -81,11 +82,11 @@ def resume_from_checkpoint(fdir, model, optimizer=None, scheduler=None):
     print(f'Loading checkpoint from "{fpath}"')
     checkpoint = load_checkpoint(fpath)
 
-    # 1. 加载模型参数
+    # 1. 加载模型参数（Jittor用load_parameters）
     model.load_parameters(checkpoint["state_dict"])
     print("Loaded model weights")
 
-    # 2. 加载优化器
+    # 2. 加载优化器（Jittor优化器支持load_state_dict）
     if optimizer is not None and "optimizer" in checkpoint:
         try:
             optimizer.load_state_dict(checkpoint["optimizer"])
@@ -93,20 +94,25 @@ def resume_from_checkpoint(fdir, model, optimizer=None, scheduler=None):
         except Exception as e:
             print(f"Warning: 优化器状态加载失败，使用默认参数: {e}")
 
-    # 3. 加载调度器
+    # 3. 修复：加载调度器（核心修改）
     if scheduler is not None and "scheduler" in checkpoint:
         scheduler_ckpt = checkpoint["scheduler"]
         try:
+            # 尝试正常加载（适用于自定义调度器如LinearWarmupScheduler）
             scheduler.load_state_dict(scheduler_ckpt)
             print("Loaded scheduler state via load_state_dict")
         except AttributeError:
+            # 情况1：Jittor基础调度器（如CosineAnnealingLR）无load_state_dict
             print("Scheduler has no load_state_dict, manually setting last_epoch")
+            # 提取并设置last_epoch（调度器唯一需要的状态）
             if "last_epoch" in scheduler_ckpt:
                 scheduler.last_epoch = scheduler_ckpt["last_epoch"]
+            # 兼容热身调度器的state_dict结构（包含successor_state）
             elif "successor_state" in scheduler_ckpt:
                 successor_last_epoch = scheduler_ckpt["successor_state"].get("last_epoch", -1)
                 scheduler.successor.last_epoch = successor_last_epoch
         except Exception as e:
+            # 其他错误时的兜底方案
             print(f"Scheduler load failed: {e}，手动恢复last_epoch")
             if hasattr(scheduler, "last_epoch"):
                 scheduler.last_epoch = scheduler_ckpt.get("last_epoch", -1)
@@ -118,6 +124,7 @@ def resume_from_checkpoint(fdir, model, optimizer=None, scheduler=None):
     return start_epoch
 
 
+# 以下函数无需修改，保持原样即可
 def adjust_learning_rate(
     optimizer,
     base_lr,
@@ -196,6 +203,7 @@ def load_pretrained_weights(model, weight_path):
     matched_layers, discarded_layers = [], []
 
     for k, v in state_dict.items():
+        # Jittor无module.前缀，直接匹配键
         if k in model_dict and model_dict[k].shape == v.shape:
             new_state_dict[k] = v
             matched_layers.append(k)
