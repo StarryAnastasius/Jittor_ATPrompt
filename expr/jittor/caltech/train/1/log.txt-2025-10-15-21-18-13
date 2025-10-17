@@ -1,0 +1,416 @@
+***************
+** Arguments **
+***************
+backbone: 
+config_file: configs/trainers/CoOp/vit_b16.yaml
+dataset_config_file: configs/datasets/caltech101.yaml
+eval_only: False
+head: 
+load_epoch: None
+model_dir: 
+no_train: False
+opts: ['TRAINER.COOP.N_CTX', '4', 'TRAINER.COOP.CSC', 'False', 'TRAINER.COOP.CLASS_TOKEN_POSITION', 'end', 'DATASET.NUM_SHOTS', '16', 'DATASET.SUBSAMPLE_CLASSES', 'base', 'TRAINER.ATPROMPT.USE_ATPROMPT', 'True', 'TRAINER.ATPROMPT.N_ATT1', '4', 'TRAINER.ATPROMPT.N_ATT2', '4', 'TRAINER.ATPROMPT.N_ATT3', '4', 'OPTIM.MAX_EPOCH', '25', 'TRAIN.CHECKPOINT_FREQ', '1']
+output_dir: output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed1
+resume: 
+root: /root/prompt_dataset
+seed: 1
+source_domains: None
+target_domains: None
+trainer: CoOp_ATP
+transforms: None
+************
+** Config **
+************
+DATALOADER:
+  K_TRANSFORMS: 1
+  NUM_WORKERS: 8
+  RETURN_IMG0: False
+  TEST:
+    BATCH_SIZE: 50
+    SAMPLER: SequentialSampler
+  TRAIN_U:
+    BATCH_SIZE: 32
+    N_DOMAIN: 0
+    N_INS: 16
+    SAME_AS_X: True
+    SAMPLER: RandomSampler
+  TRAIN_X:
+    BATCH_SIZE: 4
+    N_DOMAIN: 0
+    N_INS: 16
+    SAMPLER: RandomSampler
+DATASET:
+  ALL_AS_UNLABELED: False
+  CIFAR_C_LEVEL: 1
+  CIFAR_C_TYPE: 
+  NAME: Caltech101
+  NUM_LABELED: -1
+  NUM_SHOTS: 16
+  ROOT: /root/prompt_dataset
+  SOURCE_DOMAINS: ()
+  STL10_FOLD: -1
+  SUBSAMPLE_CLASSES: base
+  TARGET_DOMAINS: ()
+  VAL_PERCENT: 0.1
+INPUT:
+  COLORJITTER_B: 0.4
+  COLORJITTER_C: 0.4
+  COLORJITTER_H: 0.1
+  COLORJITTER_S: 0.4
+  CROP_PADDING: 4
+  CUTOUT_LEN: 16
+  CUTOUT_N: 1
+  GB_K: 21
+  GB_P: 0.5
+  GN_MEAN: 0.0
+  GN_STD: 0.15
+  INTERPOLATION: bicubic
+  NO_TRANSFORM: False
+  PIXEL_MEAN: [0.48145466, 0.4578275, 0.40821073]
+  PIXEL_STD: [0.26862954, 0.26130258, 0.27577711]
+  RANDAUGMENT_M: 10
+  RANDAUGMENT_N: 2
+  RGS_P: 0.2
+  RRCROP_SCALE: (0.08, 1.0)
+  SIZE: (224, 224)
+  TRANSFORMS: ('random_resized_crop', 'random_flip', 'normalize')
+MODEL:
+  BACKBONE:
+    NAME: ViT-B/16
+    PRETRAINED: True
+  HEAD:
+    ACTIVATION: relu
+    BN: True
+    DROPOUT: 0.0
+    HIDDEN_LAYERS: ()
+    NAME: 
+  INIT_WEIGHTS: 
+OPTIM:
+  ADAM_BETA1: 0.9
+  ADAM_BETA2: 0.999
+  BASE_LR_MULT: 0.1
+  GAMMA: 0.1
+  LR: 0.002
+  LR_SCHEDULER: cosine
+  MAX_EPOCH: 25
+  MOMENTUM: 0.9
+  NAME: sgd
+  NEW_LAYERS: ()
+  RMSPROP_ALPHA: 0.99
+  SGD_DAMPNING: 0
+  SGD_NESTEROV: False
+  STAGED_LR: False
+  STEPSIZE: (-1,)
+  WARMUP_CONS_LR: 1e-05
+  WARMUP_EPOCH: 1
+  WARMUP_MIN_LR: 1e-05
+  WARMUP_RECOUNT: True
+  WARMUP_TYPE: constant
+  WEIGHT_DECAY: 0.0005
+OUTPUT_DIR: output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed1
+RESUME: 
+SEED: 1
+TEST:
+  COMPUTE_CMAT: False
+  EVALUATOR: Classification
+  FINAL_MODEL: last_step
+  NO_TEST: False
+  PER_CLASS_RESULT: False
+  SPLIT: test
+TRAIN:
+  CHECKPOINT_FREQ: 1
+  COUNT_ITER: train_x
+  PRINT_FREQ: 20
+TRAINER:
+  ATPROMPT:
+    ATT1_TEXT: shape
+    ATT2_TEXT: size
+    ATT3_TEXT: none
+    ATT_NUM: 2
+    N_ATT1: 4
+    N_ATT2: 4
+    N_ATT3: 4
+    USE_ATPROMPT: True
+  CDAC:
+    CLASS_LR_MULTI: 10
+    P_THRESH: 0.95
+    RAMPUP_COEF: 30
+    RAMPUP_ITRS: 1000
+    STRONG_TRANSFORMS: ()
+    TOPK_MATCH: 5
+  COCOOP:
+    CTX_INIT: 
+    N_CTX: 16
+    PREC: fp16
+  COOP:
+    CLASS_TOKEN_POSITION: end
+    CSC: False
+    CTX_INIT: False
+    N_CTX: 4
+    PREC: fp16
+    W: 2.0
+  CROSSGRAD:
+    ALPHA_D: 0.5
+    ALPHA_F: 0.5
+    EPS_D: 1.0
+    EPS_F: 1.0
+  DAEL:
+    CONF_THRE: 0.95
+    STRONG_TRANSFORMS: ()
+    WEIGHT_U: 0.5
+  DAELDG:
+    CONF_THRE: 0.95
+    STRONG_TRANSFORMS: ()
+    WEIGHT_U: 0.5
+  DDAIG:
+    ALPHA: 0.5
+    CLAMP: False
+    CLAMP_MAX: 1.0
+    CLAMP_MIN: -1.0
+    G_ARCH: 
+    LMDA: 0.3
+    WARMUP: 0
+  DOMAINMIX:
+    ALPHA: 1.0
+    BETA: 1.0
+    TYPE: crossdomain
+  ENTMIN:
+    LMDA: 0.001
+  FILM:
+    LINEAR_PROBE: True
+  FIXMATCH:
+    CONF_THRE: 0.95
+    STRONG_TRANSFORMS: ()
+    WEIGHT_U: 1.0
+  IVLP:
+    CTX_INIT: a photo of a
+    IMG_WEIGHT: 0.5
+    N_CTX_TEXT: 2
+    N_CTX_VISION: 2
+    PREC: fp16
+    PROMPT_DEPTH_TEXT: 9
+    PROMPT_DEPTH_VISION: 9
+  LINEAR_PROBE:
+    TEST_TIME_FUSION: True
+    TYPE: linear
+    WEIGHT: 0.7
+  M3SDA:
+    LMDA: 0.5
+    N_STEP_F: 4
+  MAPLE:
+    CTX_INIT: a photo of a
+    N_CTX: 2
+    PREC: fp16
+    PROMPT_DEPTH: 9
+  MCD:
+    N_STEP_F: 4
+  MEANTEACHER:
+    EMA_ALPHA: 0.999
+    RAMPUP: 5
+    WEIGHT_U: 1.0
+  MIXMATCH:
+    MIXUP_BETA: 0.75
+    RAMPUP: 20000
+    TEMP: 2.0
+    WEIGHT_U: 100.0
+  MME:
+    LMDA: 0.1
+  NAME: CoOp_ATP
+  NAMES_TO_UPDATE: ['prompt_learner', 'linear_probe', 'film']
+  PROMPTSRC:
+    CTX_INIT: 
+    GPA_MEAN: 15
+    GPA_STD: 1
+    IMAGE_LOSS_WEIGHT: 10
+    N_CTX_TEXT: 4
+    N_CTX_VISION: 4
+    PREC: fp16
+    PROMPT_DEPTH_TEXT: 9
+    PROMPT_DEPTH_VISION: 9
+    TEXT_LOSS_WEIGHT: 25
+  SE:
+    CONF_THRE: 0.95
+    EMA_ALPHA: 0.999
+    RAMPUP: 300
+USE_CUDA: True
+VERBOSE: True
+VERSION: 1
+Loading trainer: CoOp_ATP
+
+=== DATALOADER DUMP (test) ===
+cfg.DATASET.NAME: Caltech101
+cfg.DATASET.SUBSAMPLE_CLASSES: base
+cfg.DATASET.NUM_SHOTS: 16
+cfg.INPUT.SIZE: (224, 224)
+No loader found for test
+
+=== DATALOADER DUMP (train) ===
+cfg.DATASET.NAME: Caltech101
+cfg.DATASET.SUBSAMPLE_CLASSES: base
+cfg.DATASET.NUM_SHOTS: 16
+cfg.INPUT.SIZE: (224, 224)
+No loader found for train
+=== 开始执行 build_data_loader，准备统计样本数 ===
+Loading dataset: Caltech101
+Reading split from /root/prompt_dataset/caltech-101/split_zhou_Caltech101.json
+Loading preprocessed few-shot data from /root/prompt_dataset/caltech-101/split_fewshot/shot_16-seed_1.pkl
+当前 SUBSAMPLE_CLASSES 配置: base
+SUBSAMPLE BASE CLASSES!
+Building transform_train
++ random resized crop (size=(224, 224), scale=(0.08, 1.0))
++ random flip
++ normalization (mean=[0.48145466, 0.4578275, 0.40821073], std=[0.26862954, 0.26130258, 0.27577711])
+Building transform_test
+
+===== 数据集原始长度信息 =====
+测试集原始长度 (len(dataset.test)): 1549
+训练集原始长度 (len(dataset.train_x)): 800
+类别数: 50
+SUBSAMPLE_CLASSES 配置: base
+=============================
+
+统计样本数时出错: 'list' object has no attribute 'data_list'
+train_loader_x 的 batch 数: 200
+单个 batch 样本数: 4
+train_loader_x 总样本数（batch数 × batch_size）: 800
+train_loader_x.dataset 长度: 200
+Loading CLIP (backbone: ViT-B/16)
+Initializing a generic context
+self.use_atp is True
+self.atp_num is 2
+Initial context: "X X X X"
+Number of context words (tokens): 4
+USE ATPROPMT-ING 1
+['X X X X shape X X X X size X X X X face.', 'X X X X shape X X X X size X X X X leopard.', 'X X X X shape X X X X size X X X X motorbike.', 'X X X X shape X X X X size X X X X accordion.', 'X X X X shape X X X X size X X X X airplane.', 'X X X X shape X X X X size X X X X anchor.', 'X X X X shape X X X X size X X X X ant.', 'X X X X shape X X X X size X X X X barrel.', 'X X X X shape X X X X size X X X X bass.', 'X X X X shape X X X X size X X X X beaver.', 'X X X X shape X X X X size X X X X binocular.', 'X X X X shape X X X X size X X X X bonsai.', 'X X X X shape X X X X size X X X X brain.', 'X X X X shape X X X X size X X X X brontosaurus.', 'X X X X shape X X X X size X X X X buddha.', 'X X X X shape X X X X size X X X X butterfly.', 'X X X X shape X X X X size X X X X camera.', 'X X X X shape X X X X size X X X X cannon.', 'X X X X shape X X X X size X X X X car side.', 'X X X X shape X X X X size X X X X ceiling fan.', 'X X X X shape X X X X size X X X X cellphone.', 'X X X X shape X X X X size X X X X chair.', 'X X X X shape X X X X size X X X X chandelier.', 'X X X X shape X X X X size X X X X cougar body.', 'X X X X shape X X X X size X X X X cougar face.', 'X X X X shape X X X X size X X X X crab.', 'X X X X shape X X X X size X X X X crayfish.', 'X X X X shape X X X X size X X X X crocodile.', 'X X X X shape X X X X size X X X X crocodile head.', 'X X X X shape X X X X size X X X X cup.', 'X X X X shape X X X X size X X X X dalmatian.', 'X X X X shape X X X X size X X X X dollar bill.', 'X X X X shape X X X X size X X X X dolphin.', 'X X X X shape X X X X size X X X X dragonfly.', 'X X X X shape X X X X size X X X X electric guitar.', 'X X X X shape X X X X size X X X X elephant.', 'X X X X shape X X X X size X X X X emu.', 'X X X X shape X X X X size X X X X euphonium.', 'X X X X shape X X X X size X X X X ewer.', 'X X X X shape X X X X size X X X X ferry.', 'X X X X shape X X X X size X X X X flamingo.', 'X X X X shape X X X X size X X X X flamingo head.', 'X X X X shape X X X X size X X X X garfield.', 'X X X X shape X X X X size X X X X gerenuk.', 'X X X X shape X X X X size X X X X gramophone.', 'X X X X shape X X X X size X X X X grand piano.', 'X X X X shape X X X X size X X X X hawksbill.', 'X X X X shape X X X X size X X X X headphone.', 'X X X X shape X X X X size X X X X hedgehog.', 'X X X X shape X X X X size X X X X helicopter.']
+embedding shape is [50,77,512,]
+USE ATPROPMT-ING 2
+
+===== 开始构建优化器 =====
+优化器类型: sgd
+学习率 (LR): 0.002
+权重衰减 (WEIGHT_DECAY): 0.0005
+参数组 (param_groups) 为None，开始自动构建参数组...
+不启用分段学习率，使用模型所有参数...
+参数组总参数数量: 9
+
+开始初始化优化器: sgd
+SGD参数 - 学习率: 0.002, 动量: 0.9, 权重衰减: 0.0005
+优化器构建成功: SGD
+===== 优化器构建结束 =====
+
+=== 开始执行 build_data_loader，准备统计样本数 ===
+Loading dataset: Caltech101
+Reading split from /root/prompt_dataset/caltech-101/split_zhou_Caltech101.json
+Loading preprocessed few-shot data from /root/prompt_dataset/caltech-101/split_fewshot/shot_16-seed_1.pkl
+当前 SUBSAMPLE_CLASSES 配置: base
+SUBSAMPLE BASE CLASSES!
+
+===== 数据集原始长度信息 =====
+测试集原始长度 (len(dataset.test)): 1549
+训练集原始长度 (len(dataset.train_x)): 800
+类别数: 50
+SUBSAMPLE_CLASSES 配置: base
+=============================
+
+统计样本数时出错: 'list' object has no attribute 'data_list'
+train_loader_x 的 batch 数: 200
+单个 batch 样本数: 4
+train_loader_x 总样本数（batch数 × batch_size）: 800
+train_loader_x.dataset 长度: 200
+Loading evaluator: Classification
+找到 checkpoint 在 output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed1（将恢复训练）
+Loading checkpoint from "output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed1/prompt_learner/model.pth.tar-22"
+Loaded model weights
+Loaded optimizer state
+Scheduler has no load_state_dict, manually setting last_epoch
+Previous epoch: 22
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.001426
+epoch [23/25] batch [20/200] time 7.466 (5.822) data 7.294 (5.626) loss 0.3503 (0.1796) acc 100.0000 (96.2500) lr 1.4261e-03 eta 0:56:16
+[调度器验证] batch 40: 学习率=0.001188
+epoch [23/25] batch [40/200] time 10.929 (7.551) data 10.748 (7.367) loss 0.0058 (0.1666) acc 100.0000 (95.6250) lr 1.1878e-03 eta 1:10:28
+[调度器验证] batch 60: 学习率=0.000272
+epoch [23/25] batch [60/200] time 14.394 (9.282) data 14.220 (9.101) loss 0.1373 (0.1478) acc 100.0000 (95.4167) lr 2.7190e-04 eta 1:23:32
+[调度器验证] batch 80: 学习率=0.001992
+epoch [23/25] batch [80/200] time 17.854 (11.014) data 17.683 (10.835) loss 0.0028 (0.1457) acc 100.0000 (95.0000) lr 1.9921e-03 eta 1:35:27
+[调度器验证] batch 100: 学习率=0.000125
+epoch [23/25] batch [100/200] time 21.305 (12.744) data 21.133 (12.566) loss 0.0000 (0.1728) acc 100.0000 (94.5000) lr 1.2463e-04 eta 1:46:11
+[调度器验证] batch 120: 学习率=0.001426
+epoch [23/25] batch [120/200] time 24.767 (14.473) data 24.596 (14.297) loss 0.0874 (0.1970) acc 100.0000 (93.9583) lr 1.4261e-03 eta 1:55:47
+[调度器验证] batch 140: 学习率=0.001188
+epoch [23/25] batch [140/200] time 28.215 (16.202) data 28.041 (16.026) loss 0.0126 (0.2045) acc 100.0000 (93.7500) lr 1.1878e-03 eta 2:04:12
+[调度器验证] batch 160: 学习率=0.000272
+epoch [23/25] batch [160/200] time 31.677 (17.931) data 31.506 (17.756) loss 0.1723 (0.2169) acc 100.0000 (93.2812) lr 2.7190e-04 eta 2:11:29
+[调度器验证] batch 180: 学习率=0.001992
+epoch [23/25] batch [180/200] time 35.130 (19.660) data 34.961 (19.485) loss 0.3804 (0.2198) acc 100.0000 (93.6111) lr 1.9921e-03 eta 2:17:37
+[调度器验证] batch 200: 学习率=0.000071
+epoch [23/25] batch [200/200] time 38.577 (21.388) data 38.406 (21.213) loss 0.4479 (0.2263) acc 75.0000 (93.2500) lr 7.1188e-05 eta 2:22:35
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 4622}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed1/prompt_learner/model.pth.tar-23
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.001536
+epoch [24/25] batch [20/200] time 3.389 (1.786) data 3.222 (1.617) loss 0.2017 (0.1808) acc 100.0000 (96.2500) lr 1.5361e-03 eta 0:11:18
+[调度器验证] batch 40: 学习率=0.001063
+epoch [24/25] batch [40/200] time 6.778 (3.475) data 6.607 (3.306) loss 0.0087 (0.2075) acc 100.0000 (94.3750) lr 1.0633e-03 eta 0:20:51
+[调度器验证] batch 60: 学习率=0.000363
+epoch [24/25] batch [60/200] time 10.165 (5.169) data 9.995 (5.000) loss 0.0579 (0.2380) acc 100.0000 (93.3333) lr 3.6339e-04 eta 0:29:17
+[调度器验证] batch 80: 学习率=0.001969
+epoch [24/25] batch [80/200] time 13.582 (6.865) data 13.412 (6.696) loss 0.0353 (0.2024) acc 100.0000 (94.3750) lr 1.9686e-03 eta 0:36:36
+[调度器验证] batch 100: 学习率=0.000071
+epoch [24/25] batch [100/200] time 17.006 (8.568) data 16.836 (8.398) loss 0.1568 (0.2171) acc 100.0000 (94.2500) lr 7.1188e-05 eta 0:42:50
+[调度器验证] batch 120: 学习率=0.001536
+epoch [24/25] batch [120/200] time 20.440 (10.274) data 20.271 (10.104) loss 0.0146 (0.2285) acc 100.0000 (93.7500) lr 1.5361e-03 eta 0:47:56
+[调度器验证] batch 140: 学习率=0.001063
+epoch [24/25] batch [140/200] time 23.882 (11.984) data 23.709 (11.814) loss 0.0015 (0.2289) acc 100.0000 (93.3929) lr 1.0633e-03 eta 0:51:55
+[调度器验证] batch 160: 学习率=0.000363
+epoch [24/25] batch [160/200] time 27.330 (13.698) data 27.160 (13.528) loss 0.0010 (0.2104) acc 100.0000 (93.9062) lr 3.6339e-04 eta 0:54:47
+[调度器验证] batch 180: 学习率=0.001969
+epoch [24/25] batch [180/200] time 30.767 (15.413) data 30.596 (15.243) loss 0.1571 (0.2088) acc 100.0000 (94.1667) lr 1.9686e-03 eta 0:56:30
+[调度器验证] batch 200: 学习率=0.000032
+epoch [24/25] batch [200/200] time 34.209 (17.129) data 34.037 (16.959) loss 0.0067 (0.2168) acc 100.0000 (93.8750) lr 3.2401e-05 eta 0:57:05
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 4823}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed1/prompt_learner/model.pth.tar-24
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.001638
+epoch [25/25] batch [20/200] time 3.453 (1.811) data 3.279 (1.639) loss 0.0038 (0.2210) acc 100.0000 (96.2500) lr 1.6376e-03 eta 0:05:26
+[调度器验证] batch 40: 学习率=0.000938
+epoch [25/25] batch [40/200] time 6.912 (3.537) data 6.737 (3.365) loss 0.0207 (0.1798) acc 100.0000 (96.8750) lr 9.3774e-04 eta 0:09:25
+[调度器验证] batch 60: 学习率=0.000465
+epoch [25/25] batch [60/200] time 10.350 (5.263) data 10.179 (5.091) loss 0.3082 (0.1829) acc 100.0000 (96.6667) lr 4.6494e-04 eta 0:12:16
+[调度器验证] batch 80: 学习率=0.001930
+epoch [25/25] batch [80/200] time 13.795 (6.987) data 13.622 (6.815) loss 0.0049 (0.1983) acc 100.0000 (95.6250) lr 1.9298e-03 eta 0:13:58
+[调度器验证] batch 100: 学习率=0.000032
+epoch [25/25] batch [100/200] time 17.241 (8.712) data 17.069 (8.540) loss 0.0022 (0.1758) acc 100.0000 (95.7500) lr 3.2401e-05 eta 0:14:31
+[调度器验证] batch 120: 学习率=0.001638
+epoch [25/25] batch [120/200] time 20.687 (10.435) data 20.515 (10.263) loss 0.0042 (0.1843) acc 100.0000 (95.4167) lr 1.6376e-03 eta 0:13:54
+[调度器验证] batch 140: 学习率=0.000938
+epoch [25/25] batch [140/200] time 24.139 (12.158) data 23.970 (11.986) loss 0.0627 (0.1738) acc 100.0000 (95.3571) lr 9.3774e-04 eta 0:12:09
+[调度器验证] batch 160: 学习率=0.000465
+epoch [25/25] batch [160/200] time 27.605 (13.883) data 27.431 (13.711) loss 0.0036 (0.1804) acc 100.0000 (94.8438) lr 4.6494e-04 eta 0:09:15
+[调度器验证] batch 180: 学习率=0.001930
+epoch [25/25] batch [180/200] time 31.084 (15.610) data 30.907 (15.438) loss 0.1420 (0.1894) acc 100.0000 (94.5833) lr 1.9298e-03 eta 0:05:12
+[调度器验证] batch 200: 学习率=0.000009
+epoch [25/25] batch [200/200] time 34.612 (17.344) data 34.435 (17.171) loss 0.0080 (0.1844) acc 100.0000 (94.5000) lr 8.8814e-06 eta 0:00:00
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 5024}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed1/prompt_learner/model.pth.tar-25
+训练完成
+加载最后一轮模型
+=== 验证类别列表 ===
+
+在 *test* 集上评估
+=> result
+* total: 1,549
+* correct: 1,502
+* accuracy: 96.966%
+* error: 3.03%
+* macro_f1: 94.60%
+耗时: 0:02:10

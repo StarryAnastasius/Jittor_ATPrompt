@@ -5,11 +5,11 @@ Jittor implementation of ATPrompt algorithm, with alignment verification against
 
 ## 📖 论文简介
 
-**ATPrompt**的核心思想是
+**ATPrompt**（基于属性锚点的文本提示学习方法）核心是解决现有视觉 - 语言模型 “仅能对齐已知类别、无法关联未知类别” 的问题，核心思路可简化为两点：
 
-1. 
-2. 
-3. 
+1. 用通用属性当 “桥梁”：引入颜色、形状、材质等通用属性，让模型在学习类别特征时，额外掌握属性相关的通用表征，从而帮图像与未知类别的文本建立对齐关系，突破仅适配已知类别的局限。
+
+2. 自动选属性且即插即用：通过可微分算法从候选池中自动筛选适配任务的最优属性，同时能像插件一样无缝替换现有文本提示形式，无需额外计算开销，就能为基线模型提升性能。
 
 ## 🏗️ 项目结构
 
@@ -31,6 +31,7 @@ Jittor implementation of ATPrompt algorithm, with alignment verification against
 ├── 📁 configs/             # 实验配置
 ├── 📁 interpret_prompts/   # Prompt可解释性分析
 ├── 📁 Dassl.pytorch/       # 基于Jittor修改的Dassl框架
+├── 📁 expr/                # 完整Log
 └── 📁 output/              # 输出目录
 ```
 
@@ -38,8 +39,7 @@ Jittor implementation of ATPrompt algorithm, with alignment verification against
 
 ### 1. 环境准备
 
-项目环境配置为：ubuntu2204、g++-11、jittor1.13.0
-
+项目环境配置为：ubuntu2204、g++-11、jittor1.13.0、cuda12.1
 ```bash
 # 安装依赖
 pip install -r requirements.txt/
@@ -80,137 +80,68 @@ bash scripts/coop/atp_base2new_test.sh dtd
 ## 🔬 实验设置
 
 ### 任务序列
-- **任务1**: CUBS-200-2011 (鸟类分类，200个类别)
-- **任务2**: Stanford Cars (汽车分类，196个类别)  
-- **任务3**: Oxford Flowers (花卉分类，102个类别)
-
-### 剪枝策略
-- **初始剪枝**: 75% (在ImageNet预训练模型上)
-- **任务1剪枝**: 75%
-- **任务2剪枝**: 75%  
-- **任务3剪枝**: 75%
+- **任务1**: Caltech-101 Base-to-Novel (在50个类别上做16shot训练，在剩余51个Novel类别上测试)
+- **任务2**: DTD Base-to-Novel (在24个类别上做16shot训练，在剩余23个类别上测试)  
 
 ### 网络架构
-- **基础模型**: VGG-16 (ImageNet预训练)
-- **分类器**: 为每个任务添加独立的分类头
+- **基础模型**: ViT/B-16
 
 ### ⚠️简化流程
-- 为了快速验证，暂时没在ImageNet上重训练，也没有对ImageNet的性能进行测试
+- 为了快速验证，暂时没有进行原文中的属性可微搜索，直接选择了作者提供的各数据集上预设的最高权重属性。
 
-## 📊 核心算法
-
-### 1. 数据预处理 (`dataset.py`)
-
-严格按照论文第4节实现：
-
-- **CUBS & Cars**: 直接缩放到224×224
-- **Flowers**: 短边缩放到256，然后224×224裁剪
-- **数据增强**: 训练时随机水平翻转
-
-```python
-# 创建数据加载器
-train_loader, num_classes = create_dataloader(
-    dataset_name='cubs',
-    data_root='data',
-    split='train',
-    batch_size=32
-)
-```
-
-### 2. PackNet剪枝算法 (`pruning.py`)
-
-核心剪枝函数实现：
-
-```python
-# 对模型进行剪枝
-new_mask = PackNetPruning.prune_model(
-    model=model,
-    pruning_ratio=0.75,  # 剪枝75%的权重
-    previous_masks=previous_task_masks  # 保护之前任务的权重
-)
-
-# 应用掩码冻结权重
-PackNetPruning.freeze_weights_by_mask(model, previous_masks)
-```
-
-### 3. 多任务训练流程 (`main.py`)
-
-完整的PackNet训练流程：
-
-1. **初始剪枝**: 对VGG-16进行75%剪枝
-2. **任务循环**:
-   - 冻结之前任务的权重
-   - 训练当前任务
-   - 剪枝当前任务的权重
-   - 微调恢复性能
-3. **最终评估**: 验证所有任务的性能保持
 
 ## 🎯 实验结果
 
 
-### Jittor 复现结果 vs. 论文报告结果 (Top-1 准确率 %)
+### Jittor 复现结果 vs. 论文报告结果 (三次运行取平均后 Top-1 准确率 %)
 
-| **任务** | **Jittor 复现 (本项目)** | PyTorch复现 | **原论文 (VGG-16, 75%剪枝)** |
+| **任务** | **Jittor 复现** | PyTorch复现 |  **原论文** |
 | :--- | :---: | :---: | ----- |
-| CUBS | 68.69% | 75.94% | 75.05% (24.95% 错误率) |
-| Stanford Cars | 79.14% | 83.39% | 84.25% (15.75% 错误率) |
-| Flowers | 87.74% | 87.43% | 90.25% (9.75% 错误率) |
+| Caltech-101 | 92.29% | 94.54% | 95.74% |
+| DTD | 49.76% | 51.75% | 58.22% |
 
-* ImageNet剪枝后没有进行重训练使性能恢复。ImageNet的参数对后续任务都会用到，这可能影响性能。
+* CLIP权重转换为pkl文件再向jt.Var过程中有精度损失。
 * 深度学习框架不同。
 
-### 训练过程（CUBS）
+### 训练过程
 
-![image-20250714104323383](image-20250714104323383.png)
+#### 训练收敛情况
+![Caltech-101数据集上的loss](expr/caltech_loss.png)
+![DTD数据集上的loss](expr/dtd_loss.png)
+#### 在Base类别上的性能
+![Caltech-101数据集上的acc](expr/caltech_acc.png)
+![DTD数据集上的acc](expr/dtd_acc.png)
+### 在Novel类别上的性能
+![Caltech-101数据集上的acc](expr/caltech_test.png)
+![DTD数据集上的acc](expr/dtd_test.png)
+### 完整Log
+可见expr文件夹
 
-训练完整log在log.txt中。总训练时长115min左右。
 
-### 缓解灾难性遗忘效果
 
-#### Jittor
+## 🎛️ 可配置参数
 
-![image-20250714104517345](image-20250714104517345.png)
-
-#### PyTorch复现
-
-![image-20250718155000567](image-20250718155000567.png)
-
-## 🔧 核心特性
-
-### ✅ 已实现功能
-
-1. **完整的数据加载器**
-   - 支持三个细粒度分类数据集
-   - 按照论文要求的预处理方法
-   - 自动从目录结构解析标签
-
-2. **PackNet核心算法**
-   - 基于重要性的权重剪枝
-   - 掩码管理和权重冻结
-   - 支持多任务连续学习
-
-3. **训练和评估框架**
-   - 完整的训练循环
-   - 性能评估和结果保存
-   - 模型和掩码持久化
-
-### 🎛️ 可配置参数
-
-```python
+```bash
 # Caltech101数据集训练配置
-
+CFG=vit_b16      #可选择CLIP的backbone
+SHOTS=16         #base类别上的训练样本数
+CTP=end          #类别词元位置
+TRAINER=CoOp_ATP #是否选择使用ATPrompt
+EPO=25           #迭代轮数
+NCTX=4           #各属性可学习的词元数
 
 # DTD数据集训练配置  
-
+CFG=vit_b16      #可选择CLIP的backbone
+SHOTS=16         #base类别上的训练样本数
+CTP=end          #类别词元位置
+TRAINER=CoOp_ATP #是否选择使用ATPrompt
+EPO=10           #迭代轮数
+NCTX=2           #各属性可学习的词元数
 ```
 
-## 🚨 注意事项
+## 备注
 
-1. **计算资源**: 完整实验需要GPU支持，建议至少8GB显存
-2. **数据集准备**: 确保数据集目录结构正确
-3. **Jittor安装**: 需要正确安装Jittor支持，Jittor的安装需要折腾
-
-⚠️尝试在DCU上安装Jittor并训练，但内核报错
+1. **训练资源**: 在AutoDL平台的单卡TiTan Xp上训练，显存占用约5GB
 
 ## 📚 参考文献
 

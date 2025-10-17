@@ -1,0 +1,556 @@
+***************
+** Arguments **
+***************
+backbone: 
+config_file: configs/trainers/CoOp/vit_b16.yaml
+dataset_config_file: configs/datasets/dtd.yaml
+eval_only: False
+head: 
+load_epoch: None
+model_dir: 
+no_train: False
+opts: ['TRAINER.COOP.N_CTX', '2', 'TRAINER.COOP.CSC', 'False', 'TRAINER.COOP.CLASS_TOKEN_POSITION', 'end', 'DATASET.NUM_SHOTS', '16', 'DATASET.SUBSAMPLE_CLASSES', 'base', 'TRAINER.ATPROMPT.USE_ATPROMPT', 'True', 'TRAINER.ATPROMPT.N_ATT1', '2', 'TRAINER.ATPROMPT.N_ATT2', '2', 'TRAINER.ATPROMPT.N_ATT3', '2', 'OPTIM.MAX_EPOCH', '20', 'TRAIN.CHECKPOINT_FREQ', '1']
+output_dir: output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2
+resume: 
+root: /root/prompt_dataset
+seed: 2
+source_domains: None
+target_domains: None
+trainer: CoOp_ATP
+transforms: None
+************
+** Config **
+************
+DATALOADER:
+  K_TRANSFORMS: 1
+  NUM_WORKERS: 8
+  RETURN_IMG0: False
+  TEST:
+    BATCH_SIZE: 50
+    SAMPLER: SequentialSampler
+  TRAIN_U:
+    BATCH_SIZE: 32
+    N_DOMAIN: 0
+    N_INS: 16
+    SAME_AS_X: True
+    SAMPLER: RandomSampler
+  TRAIN_X:
+    BATCH_SIZE: 32
+    N_DOMAIN: 0
+    N_INS: 16
+    SAMPLER: RandomSampler
+DATASET:
+  ALL_AS_UNLABELED: False
+  CIFAR_C_LEVEL: 1
+  CIFAR_C_TYPE: 
+  NAME: DescribableTextures
+  NUM_LABELED: -1
+  NUM_SHOTS: 16
+  ROOT: /root/prompt_dataset
+  SOURCE_DOMAINS: ()
+  STL10_FOLD: -1
+  SUBSAMPLE_CLASSES: base
+  TARGET_DOMAINS: ()
+  VAL_PERCENT: 0.1
+INPUT:
+  COLORJITTER_B: 0.4
+  COLORJITTER_C: 0.4
+  COLORJITTER_H: 0.1
+  COLORJITTER_S: 0.4
+  CROP_PADDING: 4
+  CUTOUT_LEN: 16
+  CUTOUT_N: 1
+  GB_K: 21
+  GB_P: 0.5
+  GN_MEAN: 0.0
+  GN_STD: 0.15
+  INTERPOLATION: bicubic
+  NO_TRANSFORM: False
+  PIXEL_MEAN: [0.48145466, 0.4578275, 0.40821073]
+  PIXEL_STD: [0.26862954, 0.26130258, 0.27577711]
+  RANDAUGMENT_M: 10
+  RANDAUGMENT_N: 2
+  RGS_P: 0.2
+  RRCROP_SCALE: (0.08, 1.0)
+  SIZE: (224, 224)
+  TRANSFORMS: ('random_resized_crop', 'random_flip', 'normalize')
+MODEL:
+  BACKBONE:
+    NAME: ViT-B/16
+    PRETRAINED: True
+  HEAD:
+    ACTIVATION: relu
+    BN: True
+    DROPOUT: 0.0
+    HIDDEN_LAYERS: ()
+    NAME: 
+  INIT_WEIGHTS: 
+OPTIM:
+  ADAM_BETA1: 0.9
+  ADAM_BETA2: 0.999
+  BASE_LR_MULT: 0.1
+  GAMMA: 0.1
+  LR: 0.002
+  LR_SCHEDULER: cosine
+  MAX_EPOCH: 20
+  MOMENTUM: 0.9
+  NAME: sgd
+  NEW_LAYERS: ()
+  RMSPROP_ALPHA: 0.99
+  SGD_DAMPNING: 0
+  SGD_NESTEROV: False
+  STAGED_LR: False
+  STEPSIZE: (-1,)
+  WARMUP_CONS_LR: 1e-05
+  WARMUP_EPOCH: 1
+  WARMUP_MIN_LR: 1e-05
+  WARMUP_RECOUNT: True
+  WARMUP_TYPE: constant
+  WEIGHT_DECAY: 0.0005
+OUTPUT_DIR: output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2
+RESUME: 
+SEED: 2
+TEST:
+  COMPUTE_CMAT: False
+  EVALUATOR: Classification
+  FINAL_MODEL: last_step
+  NO_TEST: False
+  PER_CLASS_RESULT: False
+  SPLIT: test
+TRAIN:
+  CHECKPOINT_FREQ: 1
+  COUNT_ITER: train_x
+  PRINT_FREQ: 20
+TRAINER:
+  ATPROMPT:
+    ATT1_TEXT: pattern
+    ATT2_TEXT: color
+    ATT3_TEXT: design
+    ATT_NUM: 3
+    N_ATT1: 2
+    N_ATT2: 2
+    N_ATT3: 2
+    USE_ATPROMPT: True
+  CDAC:
+    CLASS_LR_MULTI: 10
+    P_THRESH: 0.95
+    RAMPUP_COEF: 30
+    RAMPUP_ITRS: 1000
+    STRONG_TRANSFORMS: ()
+    TOPK_MATCH: 5
+  COCOOP:
+    CTX_INIT: 
+    N_CTX: 16
+    PREC: fp16
+  COOP:
+    CLASS_TOKEN_POSITION: end
+    CSC: False
+    CTX_INIT: False
+    N_CTX: 2
+    PREC: fp16
+    W: 2.0
+  CROSSGRAD:
+    ALPHA_D: 0.5
+    ALPHA_F: 0.5
+    EPS_D: 1.0
+    EPS_F: 1.0
+  DAEL:
+    CONF_THRE: 0.95
+    STRONG_TRANSFORMS: ()
+    WEIGHT_U: 0.5
+  DAELDG:
+    CONF_THRE: 0.95
+    STRONG_TRANSFORMS: ()
+    WEIGHT_U: 0.5
+  DDAIG:
+    ALPHA: 0.5
+    CLAMP: False
+    CLAMP_MAX: 1.0
+    CLAMP_MIN: -1.0
+    G_ARCH: 
+    LMDA: 0.3
+    WARMUP: 0
+  DOMAINMIX:
+    ALPHA: 1.0
+    BETA: 1.0
+    TYPE: crossdomain
+  ENTMIN:
+    LMDA: 0.001
+  FILM:
+    LINEAR_PROBE: True
+  FIXMATCH:
+    CONF_THRE: 0.95
+    STRONG_TRANSFORMS: ()
+    WEIGHT_U: 1.0
+  IVLP:
+    CTX_INIT: a photo of a
+    IMG_WEIGHT: 0.5
+    N_CTX_TEXT: 2
+    N_CTX_VISION: 2
+    PREC: fp16
+    PROMPT_DEPTH_TEXT: 9
+    PROMPT_DEPTH_VISION: 9
+  LINEAR_PROBE:
+    TEST_TIME_FUSION: True
+    TYPE: linear
+    WEIGHT: 0.7
+  M3SDA:
+    LMDA: 0.5
+    N_STEP_F: 4
+  MAPLE:
+    CTX_INIT: a photo of a
+    N_CTX: 2
+    PREC: fp16
+    PROMPT_DEPTH: 9
+  MCD:
+    N_STEP_F: 4
+  MEANTEACHER:
+    EMA_ALPHA: 0.999
+    RAMPUP: 5
+    WEIGHT_U: 1.0
+  MIXMATCH:
+    MIXUP_BETA: 0.75
+    RAMPUP: 20000
+    TEMP: 2.0
+    WEIGHT_U: 100.0
+  MME:
+    LMDA: 0.1
+  NAME: CoOp_ATP
+  NAMES_TO_UPDATE: ['prompt_learner', 'linear_probe', 'film']
+  PROMPTSRC:
+    CTX_INIT: 
+    GPA_MEAN: 15
+    GPA_STD: 1
+    IMAGE_LOSS_WEIGHT: 10
+    N_CTX_TEXT: 4
+    N_CTX_VISION: 4
+    PREC: fp16
+    PROMPT_DEPTH_TEXT: 9
+    PROMPT_DEPTH_VISION: 9
+    TEXT_LOSS_WEIGHT: 25
+  SE:
+    CONF_THRE: 0.95
+    EMA_ALPHA: 0.999
+    RAMPUP: 300
+USE_CUDA: True
+VERBOSE: True
+VERSION: 1
+DEBUG: print_args finished, start build_trainer
+DEBUG: eval_only = False
+DEBUG: model_dir = 
+DEBUG: load_epoch = None
+Loading trainer: CoOp_ATP
+Loading dataset: DescribableTextures
+Reading split from /root/prompt_dataset/dtd/split_zhou_DescribableTextures.json
+Creating a 16-shot dataset
+Creating a 4-shot dataset
+Saving preprocessed few-shot data to /root/prompt_dataset/dtd/split_fewshot/shot_16-seed_2.pkl
+SUBSAMPLE BASE CLASSES!
+Building transform_train
++ random resized crop (size=(224, 224), scale=(0.08, 1.0))
++ random flip
++ to torch tensor of range [0, 1]
++ normalization (mean=[0.48145466, 0.4578275, 0.40821073], std=[0.26862954, 0.26130258, 0.27577711])
+Building transform_test
++ resize the smaller edge to 224
++ 224x224 center crop
++ to torch tensor of range [0, 1]
++ normalization (mean=[0.48145466, 0.4578275, 0.40821073], std=[0.26862954, 0.26130258, 0.27577711])
+框架: PyTorch
+train_x 原始长度: 384
+test 原始长度: 864
+train_loader_x 长度（batch数）: 12
+test_loader 长度（batch数）: 18
+---------  -------------------
+Dataset    DescribableTextures
+# classes  24
+# train_x  384
+# val      96
+# test     864
+---------  -------------------
+Loading CLIP (backbone: ViT-B/16)
+build model vit is True
+Building custom CLIP
+Initializing a generic context
+self.use_atp is True
+self.atp_num is 3
+Initial context: "X X"
+Number of context words (tokens): 2
+USE ATPROPMT-ING 1
+['X X pattern X X color X X design X X banded.', 'X X pattern X X color X X design X X blotchy.', 'X X pattern X X color X X design X X braided.', 'X X pattern X X color X X design X X bubbly.', 'X X pattern X X color X X design X X bumpy.', 'X X pattern X X color X X design X X chequered.', 'X X pattern X X color X X design X X cobwebbed.', 'X X pattern X X color X X design X X cracked.', 'X X pattern X X color X X design X X crosshatched.', 'X X pattern X X color X X design X X crystalline.', 'X X pattern X X color X X design X X dotted.', 'X X pattern X X color X X design X X fibrous.', 'X X pattern X X color X X design X X flecked.', 'X X pattern X X color X X design X X freckled.', 'X X pattern X X color X X design X X frilly.', 'X X pattern X X color X X design X X gauzy.', 'X X pattern X X color X X design X X grid.', 'X X pattern X X color X X design X X grooved.', 'X X pattern X X color X X design X X honeycombed.', 'X X pattern X X color X X design X X interlaced.', 'X X pattern X X color X X design X X knitted.', 'X X pattern X X color X X design X X lacelike.', 'X X pattern X X color X X design X X lined.', 'X X pattern X X color X X design X X marbled.']
+embedding size is torch.Size([24, 77, 512])
+USE ATPROPMT-ING 2
+Turning off gradients in both the image and the text encoder
+Loading evaluator: Classification
+DEBUG: build_trainer finished, start check eval_only
+No checkpoint found, train from scratch
+epoch [1/20] batch [1/12] time 2.401 (2.401) data 0.961 (0.961) loss 2.1270 (2.1270) acc 37.5000 (37.5000) lr 1.0000e-05 eta 0:09:33
+epoch [1/20] batch [2/12] time 0.548 (1.475) data 0.000 (0.481) loss 2.3496 (2.2383) acc 40.6250 (39.0625) lr 1.0000e-05 eta 0:05:50
+epoch [1/20] batch [3/12] time 0.552 (1.167) data 0.000 (0.320) loss 2.3828 (2.2865) acc 40.6250 (39.5833) lr 1.0000e-05 eta 0:04:36
+epoch [1/20] batch [4/12] time 0.549 (1.012) data 0.000 (0.240) loss 2.0645 (2.2310) acc 46.8750 (41.4062) lr 1.0000e-05 eta 0:03:58
+epoch [1/20] batch [5/12] time 0.553 (0.921) data 0.000 (0.192) loss 1.7061 (2.1260) acc 56.2500 (44.3750) lr 1.0000e-05 eta 0:03:36
+epoch [1/20] batch [6/12] time 0.554 (0.859) data 0.000 (0.160) loss 2.2520 (2.1470) acc 34.3750 (42.7083) lr 1.0000e-05 eta 0:03:21
+epoch [1/20] batch [7/12] time 0.555 (0.816) data 0.000 (0.137) loss 1.7354 (2.0882) acc 56.2500 (44.6429) lr 1.0000e-05 eta 0:03:10
+epoch [1/20] batch [8/12] time 0.553 (0.783) data 0.000 (0.120) loss 2.0059 (2.0779) acc 56.2500 (46.0938) lr 1.0000e-05 eta 0:03:01
+epoch [1/20] batch [9/12] time 0.550 (0.757) data 0.000 (0.107) loss 2.2129 (2.0929) acc 31.2500 (44.4444) lr 1.0000e-05 eta 0:02:54
+epoch [1/20] batch [10/12] time 0.555 (0.737) data 0.000 (0.096) loss 2.4922 (2.1328) acc 28.1250 (42.8125) lr 1.0000e-05 eta 0:02:49
+epoch [1/20] batch [11/12] time 0.550 (0.720) data 0.000 (0.088) loss 1.8682 (2.1088) acc 50.0000 (43.4659) lr 1.0000e-05 eta 0:02:44
+epoch [1/20] batch [12/12] time 0.552 (0.706) data 0.000 (0.080) loss 1.8984 (2.0912) acc 53.1250 (44.2708) lr 2.0000e-03 eta 0:02:40
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-1
+epoch [2/20] batch [1/12] time 1.184 (1.184) data 0.632 (0.632) loss 2.0039 (2.0039) acc 46.8750 (46.8750) lr 2.0000e-03 eta 0:04:28
+epoch [2/20] batch [2/12] time 0.554 (0.869) data 0.000 (0.316) loss 1.8848 (1.9443) acc 59.3750 (53.1250) lr 2.0000e-03 eta 0:03:16
+epoch [2/20] batch [3/12] time 0.554 (0.764) data 0.000 (0.211) loss 1.5332 (1.8073) acc 50.0000 (52.0833) lr 2.0000e-03 eta 0:02:51
+epoch [2/20] batch [4/12] time 0.552 (0.711) data 0.000 (0.158) loss 1.5928 (1.7537) acc 53.1250 (52.3438) lr 2.0000e-03 eta 0:02:39
+epoch [2/20] batch [5/12] time 0.552 (0.679) data 0.000 (0.126) loss 1.8809 (1.7791) acc 53.1250 (52.5000) lr 2.0000e-03 eta 0:02:31
+epoch [2/20] batch [6/12] time 0.551 (0.658) data 0.000 (0.105) loss 1.4443 (1.7233) acc 65.6250 (54.6875) lr 2.0000e-03 eta 0:02:26
+epoch [2/20] batch [7/12] time 0.552 (0.643) data 0.000 (0.090) loss 1.4248 (1.6807) acc 62.5000 (55.8036) lr 2.0000e-03 eta 0:02:22
+epoch [2/20] batch [8/12] time 0.552 (0.631) data 0.000 (0.079) loss 1.3496 (1.6393) acc 62.5000 (56.6406) lr 2.0000e-03 eta 0:02:18
+epoch [2/20] batch [9/12] time 0.552 (0.623) data 0.000 (0.070) loss 1.0010 (1.5684) acc 75.0000 (58.6806) lr 2.0000e-03 eta 0:02:16
+epoch [2/20] batch [10/12] time 0.556 (0.616) data 0.000 (0.063) loss 1.3643 (1.5479) acc 56.2500 (58.4375) lr 2.0000e-03 eta 0:02:14
+epoch [2/20] batch [11/12] time 0.554 (0.610) data 0.000 (0.058) loss 1.4590 (1.5399) acc 53.1250 (57.9545) lr 2.0000e-03 eta 0:02:12
+epoch [2/20] batch [12/12] time 0.560 (0.606) data 0.000 (0.053) loss 1.2998 (1.5199) acc 59.3750 (58.0729) lr 1.9877e-03 eta 0:02:10
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-2
+epoch [3/20] batch [1/12] time 1.072 (1.072) data 0.511 (0.511) loss 1.2139 (1.2139) acc 68.7500 (68.7500) lr 1.9877e-03 eta 0:03:50
+epoch [3/20] batch [2/12] time 0.552 (0.812) data 0.000 (0.256) loss 1.0938 (1.1538) acc 62.5000 (65.6250) lr 1.9877e-03 eta 0:02:53
+epoch [3/20] batch [3/12] time 0.552 (0.725) data 0.000 (0.171) loss 1.1562 (1.1546) acc 62.5000 (64.5833) lr 1.9877e-03 eta 0:02:34
+epoch [3/20] batch [4/12] time 0.557 (0.683) data 0.000 (0.128) loss 1.2119 (1.1689) acc 59.3750 (63.2812) lr 1.9877e-03 eta 0:02:24
+epoch [3/20] batch [5/12] time 0.554 (0.657) data 0.000 (0.102) loss 1.0098 (1.1371) acc 71.8750 (65.0000) lr 1.9877e-03 eta 0:02:18
+epoch [3/20] batch [6/12] time 0.552 (0.640) data 0.000 (0.085) loss 1.1016 (1.1312) acc 81.2500 (67.7083) lr 1.9877e-03 eta 0:02:14
+epoch [3/20] batch [7/12] time 0.554 (0.628) data 0.000 (0.073) loss 1.1133 (1.1286) acc 65.6250 (67.4107) lr 1.9877e-03 eta 0:02:11
+epoch [3/20] batch [8/12] time 0.554 (0.618) data 0.000 (0.064) loss 0.9429 (1.1054) acc 71.8750 (67.9688) lr 1.9877e-03 eta 0:02:08
+epoch [3/20] batch [9/12] time 0.554 (0.611) data 0.000 (0.057) loss 0.9170 (1.0845) acc 65.6250 (67.7083) lr 1.9877e-03 eta 0:02:06
+epoch [3/20] batch [10/12] time 0.555 (0.606) data 0.000 (0.051) loss 1.2158 (1.0976) acc 65.6250 (67.5000) lr 1.9877e-03 eta 0:02:04
+epoch [3/20] batch [11/12] time 0.556 (0.601) data 0.000 (0.047) loss 1.1152 (1.0992) acc 68.7500 (67.6136) lr 1.9877e-03 eta 0:02:03
+epoch [3/20] batch [12/12] time 0.555 (0.597) data 0.000 (0.043) loss 1.3818 (1.1228) acc 62.5000 (67.1875) lr 1.9511e-03 eta 0:02:01
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-3
+epoch [4/20] batch [1/12] time 1.133 (1.133) data 0.576 (0.576) loss 0.8979 (0.8979) acc 71.8750 (71.8750) lr 1.9511e-03 eta 0:03:50
+epoch [4/20] batch [2/12] time 0.557 (0.845) data 0.000 (0.288) loss 0.7520 (0.8250) acc 71.8750 (71.8750) lr 1.9511e-03 eta 0:02:50
+epoch [4/20] batch [3/12] time 0.552 (0.748) data 0.000 (0.192) loss 0.4519 (0.7006) acc 96.8750 (80.2083) lr 1.9511e-03 eta 0:02:30
+epoch [4/20] batch [4/12] time 0.556 (0.700) data 0.000 (0.144) loss 0.9907 (0.7731) acc 71.8750 (78.1250) lr 1.9511e-03 eta 0:02:19
+epoch [4/20] batch [5/12] time 0.554 (0.671) data 0.000 (0.115) loss 1.4268 (0.9039) acc 46.8750 (71.8750) lr 1.9511e-03 eta 0:02:13
+epoch [4/20] batch [6/12] time 0.555 (0.651) data 0.000 (0.096) loss 0.7290 (0.8747) acc 81.2500 (73.4375) lr 1.9511e-03 eta 0:02:08
+epoch [4/20] batch [7/12] time 0.558 (0.638) data 0.000 (0.083) loss 0.8926 (0.8773) acc 68.7500 (72.7679) lr 1.9511e-03 eta 0:02:05
+epoch [4/20] batch [8/12] time 0.563 (0.629) data 0.000 (0.072) loss 1.0605 (0.9002) acc 65.6250 (71.8750) lr 1.9511e-03 eta 0:02:03
+epoch [4/20] batch [9/12] time 0.560 (0.621) data 0.000 (0.064) loss 1.1748 (0.9307) acc 53.1250 (69.7917) lr 1.9511e-03 eta 0:02:01
+epoch [4/20] batch [10/12] time 0.556 (0.615) data 0.000 (0.058) loss 1.1162 (0.9492) acc 68.7500 (69.6875) lr 1.9511e-03 eta 0:01:59
+epoch [4/20] batch [11/12] time 0.557 (0.609) data 0.000 (0.053) loss 0.8237 (0.9378) acc 71.8750 (69.8864) lr 1.9511e-03 eta 0:01:57
+epoch [4/20] batch [12/12] time 0.559 (0.605) data 0.000 (0.048) loss 0.9668 (0.9402) acc 62.5000 (69.2708) lr 1.8910e-03 eta 0:01:56
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-4
+epoch [5/20] batch [1/12] time 1.172 (1.172) data 0.596 (0.596) loss 0.7417 (0.7417) acc 81.2500 (81.2500) lr 1.8910e-03 eta 0:03:43
+epoch [5/20] batch [2/12] time 0.554 (0.863) data 0.000 (0.298) loss 0.6377 (0.6897) acc 84.3750 (82.8125) lr 1.8910e-03 eta 0:02:44
+epoch [5/20] batch [3/12] time 0.560 (0.762) data 0.000 (0.199) loss 0.8442 (0.7412) acc 71.8750 (79.1667) lr 1.8910e-03 eta 0:02:24
+epoch [5/20] batch [4/12] time 0.554 (0.710) data 0.000 (0.149) loss 0.9526 (0.7941) acc 71.8750 (77.3438) lr 1.8910e-03 eta 0:02:13
+epoch [5/20] batch [5/12] time 0.554 (0.679) data 0.000 (0.119) loss 0.6626 (0.7678) acc 75.0000 (76.8750) lr 1.8910e-03 eta 0:02:06
+epoch [5/20] batch [6/12] time 0.557 (0.659) data 0.000 (0.100) loss 0.9756 (0.8024) acc 75.0000 (76.5625) lr 1.8910e-03 eta 0:02:02
+epoch [5/20] batch [7/12] time 0.554 (0.644) data 0.000 (0.085) loss 0.8442 (0.8084) acc 68.7500 (75.4464) lr 1.8910e-03 eta 0:01:59
+epoch [5/20] batch [8/12] time 0.557 (0.633) data 0.000 (0.075) loss 0.7441 (0.8004) acc 75.0000 (75.3906) lr 1.8910e-03 eta 0:01:56
+epoch [5/20] batch [9/12] time 0.557 (0.624) data 0.000 (0.066) loss 0.7749 (0.7975) acc 71.8750 (75.0000) lr 1.8910e-03 eta 0:01:54
+epoch [5/20] batch [10/12] time 0.557 (0.618) data 0.000 (0.060) loss 0.7910 (0.7969) acc 75.0000 (75.0000) lr 1.8910e-03 eta 0:01:52
+epoch [5/20] batch [11/12] time 0.555 (0.612) data 0.000 (0.054) loss 1.0117 (0.8164) acc 68.7500 (74.4318) lr 1.8910e-03 eta 0:01:50
+epoch [5/20] batch [12/12] time 0.557 (0.607) data 0.000 (0.050) loss 1.1133 (0.8411) acc 65.6250 (73.6979) lr 1.8090e-03 eta 0:01:49
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-5
+epoch [6/20] batch [1/12] time 1.074 (1.074) data 0.519 (0.519) loss 1.0391 (1.0391) acc 62.5000 (62.5000) lr 1.8090e-03 eta 0:03:12
+epoch [6/20] batch [2/12] time 0.553 (0.814) data 0.000 (0.259) loss 0.5708 (0.8049) acc 84.3750 (73.4375) lr 1.8090e-03 eta 0:02:24
+epoch [6/20] batch [3/12] time 0.558 (0.729) data 0.000 (0.173) loss 0.9380 (0.8493) acc 75.0000 (73.9583) lr 1.8090e-03 eta 0:02:08
+epoch [6/20] batch [4/12] time 0.556 (0.685) data 0.000 (0.130) loss 0.4751 (0.7557) acc 84.3750 (76.5625) lr 1.8090e-03 eta 0:02:00
+epoch [6/20] batch [5/12] time 0.555 (0.659) data 0.000 (0.104) loss 0.5635 (0.7173) acc 81.2500 (77.5000) lr 1.8090e-03 eta 0:01:55
+epoch [6/20] batch [6/12] time 0.555 (0.642) data 0.000 (0.087) loss 0.7007 (0.7145) acc 81.2500 (78.1250) lr 1.8090e-03 eta 0:01:51
+epoch [6/20] batch [7/12] time 0.554 (0.629) data 0.000 (0.074) loss 0.5654 (0.6932) acc 90.6250 (79.9107) lr 1.8090e-03 eta 0:01:48
+epoch [6/20] batch [8/12] time 0.560 (0.621) data 0.000 (0.065) loss 0.8267 (0.7099) acc 71.8750 (78.9062) lr 1.8090e-03 eta 0:01:46
+epoch [6/20] batch [9/12] time 0.557 (0.614) data 0.000 (0.058) loss 0.7710 (0.7167) acc 81.2500 (79.1667) lr 1.8090e-03 eta 0:01:44
+epoch [6/20] batch [10/12] time 0.557 (0.608) data 0.000 (0.052) loss 0.9082 (0.7358) acc 75.0000 (78.7500) lr 1.8090e-03 eta 0:01:43
+epoch [6/20] batch [11/12] time 0.559 (0.603) data 0.000 (0.047) loss 0.7573 (0.7378) acc 81.2500 (78.9773) lr 1.8090e-03 eta 0:01:41
+epoch [6/20] batch [12/12] time 0.559 (0.600) data 0.000 (0.043) loss 0.6294 (0.7288) acc 78.1250 (78.9062) lr 1.7071e-03 eta 0:01:40
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-6
+epoch [7/20] batch [1/12] time 1.212 (1.212) data 0.648 (0.648) loss 1.2959 (1.2959) acc 62.5000 (62.5000) lr 1.7071e-03 eta 0:03:22
+epoch [7/20] batch [2/12] time 0.560 (0.886) data 0.000 (0.324) loss 0.4189 (0.8574) acc 87.5000 (75.0000) lr 1.7071e-03 eta 0:02:27
+epoch [7/20] batch [3/12] time 0.562 (0.778) data 0.000 (0.216) loss 0.3425 (0.6858) acc 93.7500 (81.2500) lr 1.7071e-03 eta 0:02:08
+epoch [7/20] batch [4/12] time 0.557 (0.723) data 0.000 (0.162) loss 0.4290 (0.6216) acc 90.6250 (83.5938) lr 1.7071e-03 eta 0:01:58
+epoch [7/20] batch [5/12] time 0.555 (0.689) data 0.000 (0.130) loss 0.6592 (0.6291) acc 78.1250 (82.5000) lr 1.7071e-03 eta 0:01:52
+epoch [7/20] batch [6/12] time 0.555 (0.667) data 0.000 (0.108) loss 0.7271 (0.6454) acc 78.1250 (81.7708) lr 1.7071e-03 eta 0:01:48
+epoch [7/20] batch [7/12] time 0.559 (0.651) data 0.000 (0.093) loss 0.9092 (0.6831) acc 75.0000 (80.8036) lr 1.7071e-03 eta 0:01:44
+epoch [7/20] batch [8/12] time 0.559 (0.640) data 0.000 (0.081) loss 0.8423 (0.7030) acc 71.8750 (79.6875) lr 1.7071e-03 eta 0:01:42
+epoch [7/20] batch [9/12] time 0.557 (0.631) data 0.000 (0.072) loss 0.7188 (0.7048) acc 71.8750 (78.8194) lr 1.7071e-03 eta 0:01:40
+epoch [7/20] batch [10/12] time 0.557 (0.623) data 0.000 (0.065) loss 0.7930 (0.7136) acc 81.2500 (79.0625) lr 1.7071e-03 eta 0:01:38
+epoch [7/20] batch [11/12] time 0.561 (0.618) data 0.000 (0.059) loss 0.6035 (0.7036) acc 81.2500 (79.2614) lr 1.7071e-03 eta 0:01:36
+epoch [7/20] batch [12/12] time 0.561 (0.613) data 0.000 (0.054) loss 0.4270 (0.6805) acc 93.7500 (80.4688) lr 1.5878e-03 eta 0:01:35
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-7
+epoch [8/20] batch [1/12] time 1.277 (1.277) data 0.715 (0.715) loss 0.5737 (0.5737) acc 84.3750 (84.3750) lr 1.5878e-03 eta 0:03:17
+epoch [8/20] batch [2/12] time 0.560 (0.919) data 0.000 (0.357) loss 0.6987 (0.6362) acc 81.2500 (82.8125) lr 1.5878e-03 eta 0:02:21
+epoch [8/20] batch [3/12] time 0.558 (0.798) data 0.000 (0.238) loss 0.4780 (0.5835) acc 84.3750 (83.3333) lr 1.5878e-03 eta 0:02:02
+epoch [8/20] batch [4/12] time 0.558 (0.738) data 0.000 (0.179) loss 0.8018 (0.6381) acc 68.7500 (79.6875) lr 1.5878e-03 eta 0:01:52
+epoch [8/20] batch [5/12] time 0.559 (0.703) data 0.000 (0.143) loss 0.6558 (0.6416) acc 78.1250 (79.3750) lr 1.5878e-03 eta 0:01:46
+epoch [8/20] batch [6/12] time 0.557 (0.678) data 0.000 (0.119) loss 0.7852 (0.6655) acc 71.8750 (78.1250) lr 1.5878e-03 eta 0:01:41
+epoch [8/20] batch [7/12] time 0.564 (0.662) data 0.000 (0.102) loss 1.0117 (0.7150) acc 75.0000 (77.6786) lr 1.5878e-03 eta 0:01:38
+epoch [8/20] batch [8/12] time 0.564 (0.650) data 0.000 (0.089) loss 0.9150 (0.7400) acc 75.0000 (77.3438) lr 1.5878e-03 eta 0:01:36
+epoch [8/20] batch [9/12] time 0.561 (0.640) data 0.000 (0.080) loss 0.8696 (0.7544) acc 68.7500 (76.3889) lr 1.5878e-03 eta 0:01:34
+epoch [8/20] batch [10/12] time 0.556 (0.632) data 0.000 (0.072) loss 0.2844 (0.7074) acc 93.7500 (78.1250) lr 1.5878e-03 eta 0:01:32
+epoch [8/20] batch [11/12] time 0.564 (0.626) data 0.000 (0.065) loss 0.4465 (0.6837) acc 84.3750 (78.6932) lr 1.5878e-03 eta 0:01:30
+epoch [8/20] batch [12/12] time 0.562 (0.620) data 0.000 (0.060) loss 0.7979 (0.6932) acc 75.0000 (78.3854) lr 1.4540e-03 eta 0:01:29
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-8
+epoch [9/20] batch [1/12] time 1.180 (1.180) data 0.623 (0.623) loss 0.8276 (0.8276) acc 71.8750 (71.8750) lr 1.4540e-03 eta 0:02:48
+epoch [9/20] batch [2/12] time 0.557 (0.869) data 0.000 (0.312) loss 0.5288 (0.6782) acc 78.1250 (75.0000) lr 1.4540e-03 eta 0:02:03
+epoch [9/20] batch [3/12] time 0.566 (0.768) data 0.000 (0.208) loss 0.4565 (0.6043) acc 84.3750 (78.1250) lr 1.4540e-03 eta 0:01:48
+epoch [9/20] batch [4/12] time 0.558 (0.715) data 0.000 (0.156) loss 0.4353 (0.5621) acc 84.3750 (79.6875) lr 1.4540e-03 eta 0:01:40
+epoch [9/20] batch [5/12] time 0.557 (0.684) data 0.000 (0.125) loss 0.5762 (0.5649) acc 87.5000 (81.2500) lr 1.4540e-03 eta 0:01:35
+epoch [9/20] batch [6/12] time 0.565 (0.664) data 0.000 (0.104) loss 0.5913 (0.5693) acc 84.3750 (81.7708) lr 1.4540e-03 eta 0:01:31
+epoch [9/20] batch [7/12] time 0.560 (0.649) data 0.000 (0.089) loss 0.5845 (0.5715) acc 78.1250 (81.2500) lr 1.4540e-03 eta 0:01:28
+epoch [9/20] batch [8/12] time 0.562 (0.638) data 0.000 (0.078) loss 0.5391 (0.5674) acc 84.3750 (81.6406) lr 1.4540e-03 eta 0:01:26
+epoch [9/20] batch [9/12] time 0.553 (0.629) data 0.000 (0.069) loss 0.6729 (0.5791) acc 75.0000 (80.9028) lr 1.4540e-03 eta 0:01:24
+epoch [9/20] batch [10/12] time 0.551 (0.621) data 0.000 (0.062) loss 0.7324 (0.5945) acc 75.0000 (80.3125) lr 1.4540e-03 eta 0:01:23
+epoch [9/20] batch [11/12] time 0.543 (0.614) data 0.000 (0.057) loss 0.8818 (0.6206) acc 75.0000 (79.8295) lr 1.4540e-03 eta 0:01:21
+epoch [9/20] batch [12/12] time 0.551 (0.609) data 0.000 (0.052) loss 0.7056 (0.6277) acc 78.1250 (79.6875) lr 1.3090e-03 eta 0:01:20
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-9
+epoch [10/20] batch [1/12] time 1.121 (1.121) data 0.568 (0.568) loss 0.8486 (0.8486) acc 68.7500 (68.7500) lr 1.3090e-03 eta 0:02:26
+epoch [10/20] batch [2/12] time 0.549 (0.835) data 0.000 (0.284) loss 0.4763 (0.6625) acc 87.5000 (78.1250) lr 1.3090e-03 eta 0:01:48
+epoch [10/20] batch [3/12] time 0.550 (0.740) data 0.000 (0.189) loss 0.7227 (0.6825) acc 71.8750 (76.0417) lr 1.3090e-03 eta 0:01:35
+epoch [10/20] batch [4/12] time 0.552 (0.693) data 0.000 (0.142) loss 0.6973 (0.6862) acc 75.0000 (75.7812) lr 1.3090e-03 eta 0:01:28
+epoch [10/20] batch [5/12] time 0.555 (0.665) data 0.000 (0.114) loss 0.5537 (0.6597) acc 81.2500 (76.8750) lr 1.3090e-03 eta 0:01:24
+epoch [10/20] batch [6/12] time 0.553 (0.647) data 0.000 (0.095) loss 0.7627 (0.6769) acc 71.8750 (76.0417) lr 1.3090e-03 eta 0:01:21
+epoch [10/20] batch [7/12] time 0.555 (0.634) data 0.000 (0.081) loss 0.5845 (0.6637) acc 93.7500 (78.5714) lr 1.3090e-03 eta 0:01:19
+epoch [10/20] batch [8/12] time 0.552 (0.623) data 0.000 (0.071) loss 0.7695 (0.6769) acc 71.8750 (77.7344) lr 1.3090e-03 eta 0:01:17
+epoch [10/20] batch [9/12] time 0.554 (0.616) data 0.000 (0.063) loss 0.5894 (0.6672) acc 87.5000 (78.8194) lr 1.3090e-03 eta 0:01:15
+epoch [10/20] batch [10/12] time 0.555 (0.610) data 0.000 (0.057) loss 0.6382 (0.6643) acc 84.3750 (79.3750) lr 1.3090e-03 eta 0:01:14
+epoch [10/20] batch [11/12] time 0.553 (0.605) data 0.000 (0.052) loss 0.5669 (0.6554) acc 81.2500 (79.5455) lr 1.3090e-03 eta 0:01:13
+epoch [10/20] batch [12/12] time 0.554 (0.600) data 0.000 (0.047) loss 0.2284 (0.6198) acc 96.8750 (80.9896) lr 1.1564e-03 eta 0:01:12
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-10
+epoch [11/20] batch [1/12] time 1.123 (1.123) data 0.564 (0.564) loss 0.6084 (0.6084) acc 81.2500 (81.2500) lr 1.1564e-03 eta 0:02:13
+epoch [11/20] batch [2/12] time 0.557 (0.840) data 0.000 (0.282) loss 0.5469 (0.5776) acc 87.5000 (84.3750) lr 1.1564e-03 eta 0:01:39
+epoch [11/20] batch [3/12] time 0.558 (0.746) data 0.000 (0.188) loss 0.5156 (0.5570) acc 84.3750 (84.3750) lr 1.1564e-03 eta 0:01:27
+epoch [11/20] batch [4/12] time 0.552 (0.697) data 0.000 (0.141) loss 0.3806 (0.5129) acc 87.5000 (85.1562) lr 1.1564e-03 eta 0:01:20
+epoch [11/20] batch [5/12] time 0.556 (0.669) data 0.000 (0.113) loss 0.6650 (0.5433) acc 75.0000 (83.1250) lr 1.1564e-03 eta 0:01:16
+epoch [11/20] batch [6/12] time 0.559 (0.651) data 0.000 (0.094) loss 0.6089 (0.5542) acc 81.2500 (82.8125) lr 1.1564e-03 eta 0:01:14
+epoch [11/20] batch [7/12] time 0.557 (0.637) data 0.000 (0.081) loss 0.4631 (0.5412) acc 87.5000 (83.4821) lr 1.1564e-03 eta 0:01:12
+epoch [11/20] batch [8/12] time 0.557 (0.627) data 0.000 (0.071) loss 0.4644 (0.5316) acc 87.5000 (83.9844) lr 1.1564e-03 eta 0:01:10
+epoch [11/20] batch [9/12] time 0.549 (0.619) data 0.000 (0.063) loss 0.5112 (0.5294) acc 81.2500 (83.6806) lr 1.1564e-03 eta 0:01:08
+epoch [11/20] batch [10/12] time 0.560 (0.613) data 0.000 (0.057) loss 0.5825 (0.5347) acc 81.2500 (83.4375) lr 1.1564e-03 eta 0:01:07
+epoch [11/20] batch [11/12] time 0.556 (0.607) data 0.000 (0.051) loss 0.4976 (0.5313) acc 87.5000 (83.8068) lr 1.1564e-03 eta 0:01:06
+epoch [11/20] batch [12/12] time 0.556 (0.603) data 0.000 (0.047) loss 0.6353 (0.5400) acc 78.1250 (83.3333) lr 1.0000e-03 eta 0:01:05
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-11
+epoch [12/20] batch [1/12] time 1.472 (1.472) data 0.910 (0.910) loss 0.5137 (0.5137) acc 87.5000 (87.5000) lr 1.0000e-03 eta 0:02:37
+epoch [12/20] batch [2/12] time 0.555 (1.013) data 0.000 (0.455) loss 0.7617 (0.6377) acc 75.0000 (81.2500) lr 1.0000e-03 eta 0:01:47
+epoch [12/20] batch [3/12] time 0.561 (0.862) data 0.000 (0.303) loss 0.9502 (0.7419) acc 75.0000 (79.1667) lr 1.0000e-03 eta 0:01:30
+epoch [12/20] batch [4/12] time 0.556 (0.786) data 0.000 (0.228) loss 0.5869 (0.7031) acc 87.5000 (81.2500) lr 1.0000e-03 eta 0:01:21
+epoch [12/20] batch [5/12] time 0.555 (0.740) data 0.000 (0.182) loss 0.6060 (0.6837) acc 75.0000 (80.0000) lr 1.0000e-03 eta 0:01:16
+epoch [12/20] batch [6/12] time 0.557 (0.709) data 0.000 (0.152) loss 0.5508 (0.6615) acc 81.2500 (80.2083) lr 1.0000e-03 eta 0:01:12
+epoch [12/20] batch [7/12] time 0.559 (0.688) data 0.000 (0.130) loss 0.6484 (0.6597) acc 75.0000 (79.4643) lr 1.0000e-03 eta 0:01:09
+epoch [12/20] batch [8/12] time 0.560 (0.672) data 0.000 (0.114) loss 0.6753 (0.6616) acc 81.2500 (79.6875) lr 1.0000e-03 eta 0:01:07
+epoch [12/20] batch [9/12] time 0.561 (0.659) data 0.000 (0.101) loss 0.4038 (0.6330) acc 90.6250 (80.9028) lr 1.0000e-03 eta 0:01:05
+epoch [12/20] batch [10/12] time 0.559 (0.649) data 0.000 (0.091) loss 0.3623 (0.6059) acc 90.6250 (81.8750) lr 1.0000e-03 eta 0:01:03
+epoch [12/20] batch [11/12] time 0.560 (0.641) data 0.000 (0.083) loss 0.4685 (0.5934) acc 84.3750 (82.1023) lr 1.0000e-03 eta 0:01:02
+epoch [12/20] batch [12/12] time 0.555 (0.634) data 0.000 (0.076) loss 0.3013 (0.5691) acc 93.7500 (83.0729) lr 8.4357e-04 eta 0:01:00
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-12
+epoch [13/20] batch [1/12] time 1.213 (1.213) data 0.653 (0.653) loss 0.4036 (0.4036) acc 87.5000 (87.5000) lr 8.4357e-04 eta 0:01:55
+epoch [13/20] batch [2/12] time 0.557 (0.885) data 0.000 (0.327) loss 0.3867 (0.3951) acc 87.5000 (87.5000) lr 8.4357e-04 eta 0:01:23
+epoch [13/20] batch [3/12] time 0.554 (0.775) data 0.000 (0.218) loss 0.4917 (0.4273) acc 78.1250 (84.3750) lr 8.4357e-04 eta 0:01:12
+epoch [13/20] batch [4/12] time 0.559 (0.721) data 0.000 (0.163) loss 0.4548 (0.4342) acc 84.3750 (84.3750) lr 8.4357e-04 eta 0:01:06
+epoch [13/20] batch [5/12] time 0.564 (0.689) data 0.000 (0.131) loss 0.4478 (0.4369) acc 87.5000 (85.0000) lr 8.4357e-04 eta 0:01:02
+epoch [13/20] batch [6/12] time 0.559 (0.668) data 0.000 (0.109) loss 0.4014 (0.4310) acc 87.5000 (85.4167) lr 8.4357e-04 eta 0:01:00
+epoch [13/20] batch [7/12] time 0.561 (0.652) data 0.000 (0.093) loss 0.7402 (0.4752) acc 71.8750 (83.4821) lr 8.4357e-04 eta 0:00:58
+epoch [13/20] batch [8/12] time 0.555 (0.640) data 0.000 (0.082) loss 0.5688 (0.4869) acc 81.2500 (83.2031) lr 8.4357e-04 eta 0:00:56
+epoch [13/20] batch [9/12] time 0.563 (0.632) data 0.000 (0.073) loss 0.6123 (0.5008) acc 78.1250 (82.6389) lr 8.4357e-04 eta 0:00:54
+epoch [13/20] batch [10/12] time 0.562 (0.625) data 0.000 (0.065) loss 0.3262 (0.4833) acc 90.6250 (83.4375) lr 8.4357e-04 eta 0:00:53
+epoch [13/20] batch [11/12] time 0.561 (0.619) data 0.000 (0.060) loss 0.5288 (0.4875) acc 87.5000 (83.8068) lr 8.4357e-04 eta 0:00:52
+epoch [13/20] batch [12/12] time 0.563 (0.614) data 0.000 (0.055) loss 0.6406 (0.5002) acc 71.8750 (82.8125) lr 6.9098e-04 eta 0:00:51
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-13
+epoch [14/20] batch [1/12] time 1.169 (1.169) data 0.608 (0.608) loss 0.3020 (0.3020) acc 93.7500 (93.7500) lr 6.9098e-04 eta 0:01:37
+epoch [14/20] batch [2/12] time 0.558 (0.864) data 0.000 (0.304) loss 0.4661 (0.3840) acc 81.2500 (87.5000) lr 6.9098e-04 eta 0:01:10
+epoch [14/20] batch [3/12] time 0.565 (0.764) data 0.000 (0.203) loss 0.4675 (0.4119) acc 87.5000 (87.5000) lr 6.9098e-04 eta 0:01:01
+epoch [14/20] batch [4/12] time 0.564 (0.714) data 0.000 (0.152) loss 0.4727 (0.4271) acc 84.3750 (86.7188) lr 6.9098e-04 eta 0:00:57
+epoch [14/20] batch [5/12] time 0.559 (0.683) data 0.000 (0.122) loss 0.4207 (0.4258) acc 90.6250 (87.5000) lr 6.9098e-04 eta 0:00:53
+epoch [14/20] batch [6/12] time 0.557 (0.662) data 0.000 (0.102) loss 0.4490 (0.4296) acc 81.2500 (86.4583) lr 6.9098e-04 eta 0:00:51
+epoch [14/20] batch [7/12] time 0.563 (0.648) data 0.000 (0.087) loss 0.6812 (0.4656) acc 75.0000 (84.8214) lr 6.9098e-04 eta 0:00:49
+epoch [14/20] batch [8/12] time 0.555 (0.636) data 0.000 (0.076) loss 0.3657 (0.4531) acc 93.7500 (85.9375) lr 6.9098e-04 eta 0:00:48
+epoch [14/20] batch [9/12] time 0.555 (0.627) data 0.000 (0.068) loss 0.6802 (0.4783) acc 68.7500 (84.0278) lr 6.9098e-04 eta 0:00:47
+epoch [14/20] batch [10/12] time 0.560 (0.621) data 0.000 (0.061) loss 0.4998 (0.4805) acc 81.2500 (83.7500) lr 6.9098e-04 eta 0:00:45
+epoch [14/20] batch [11/12] time 0.562 (0.615) data 0.000 (0.055) loss 0.5649 (0.4881) acc 81.2500 (83.5227) lr 6.9098e-04 eta 0:00:44
+epoch [14/20] batch [12/12] time 0.560 (0.611) data 0.000 (0.051) loss 0.4829 (0.4877) acc 90.6250 (84.1146) lr 5.4601e-04 eta 0:00:43
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-14
+epoch [15/20] batch [1/12] time 1.032 (1.032) data 0.473 (0.473) loss 0.4417 (0.4417) acc 87.5000 (87.5000) lr 5.4601e-04 eta 0:01:13
+epoch [15/20] batch [2/12] time 0.554 (0.793) data 0.000 (0.237) loss 0.6060 (0.5238) acc 78.1250 (82.8125) lr 5.4601e-04 eta 0:00:55
+epoch [15/20] batch [3/12] time 0.557 (0.714) data 0.000 (0.158) loss 0.3569 (0.4682) acc 87.5000 (84.3750) lr 5.4601e-04 eta 0:00:49
+epoch [15/20] batch [4/12] time 0.563 (0.676) data 0.000 (0.118) loss 0.7554 (0.5400) acc 75.0000 (82.0312) lr 5.4601e-04 eta 0:00:45
+epoch [15/20] batch [5/12] time 0.562 (0.654) data 0.000 (0.095) loss 0.9546 (0.6229) acc 71.8750 (80.0000) lr 5.4601e-04 eta 0:00:43
+epoch [15/20] batch [6/12] time 0.561 (0.638) data 0.000 (0.079) loss 0.3325 (0.5745) acc 87.5000 (81.2500) lr 5.4601e-04 eta 0:00:42
+epoch [15/20] batch [7/12] time 0.559 (0.627) data 0.000 (0.068) loss 0.3821 (0.5470) acc 87.5000 (82.1429) lr 5.4601e-04 eta 0:00:40
+epoch [15/20] batch [8/12] time 0.563 (0.619) data 0.000 (0.059) loss 0.6309 (0.5575) acc 81.2500 (82.0312) lr 5.4601e-04 eta 0:00:39
+epoch [15/20] batch [9/12] time 0.562 (0.612) data 0.000 (0.053) loss 0.3315 (0.5324) acc 90.6250 (82.9861) lr 5.4601e-04 eta 0:00:38
+epoch [15/20] batch [10/12] time 0.557 (0.607) data 0.000 (0.047) loss 0.6377 (0.5429) acc 81.2500 (82.8125) lr 5.4601e-04 eta 0:00:37
+epoch [15/20] batch [11/12] time 0.558 (0.603) data 0.000 (0.043) loss 0.3411 (0.5246) acc 93.7500 (83.8068) lr 5.4601e-04 eta 0:00:36
+epoch [15/20] batch [12/12] time 0.560 (0.599) data 0.000 (0.040) loss 0.3694 (0.5116) acc 90.6250 (84.3750) lr 4.1221e-04 eta 0:00:35
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-15
+epoch [16/20] batch [1/12] time 1.096 (1.096) data 0.529 (0.529) loss 0.6284 (0.6284) acc 87.5000 (87.5000) lr 4.1221e-04 eta 0:01:04
+epoch [16/20] batch [2/12] time 0.561 (0.828) data 0.000 (0.265) loss 0.6313 (0.6299) acc 84.3750 (85.9375) lr 4.1221e-04 eta 0:00:48
+epoch [16/20] batch [3/12] time 0.561 (0.739) data 0.000 (0.177) loss 0.3479 (0.5359) acc 90.6250 (87.5000) lr 4.1221e-04 eta 0:00:42
+epoch [16/20] batch [4/12] time 0.559 (0.694) data 0.000 (0.132) loss 0.3843 (0.4980) acc 93.7500 (89.0625) lr 4.1221e-04 eta 0:00:38
+epoch [16/20] batch [5/12] time 0.558 (0.667) data 0.000 (0.106) loss 0.3638 (0.4711) acc 90.6250 (89.3750) lr 4.1221e-04 eta 0:00:36
+epoch [16/20] batch [6/12] time 0.553 (0.648) data 0.000 (0.088) loss 0.4675 (0.4705) acc 84.3750 (88.5417) lr 4.1221e-04 eta 0:00:34
+epoch [16/20] batch [7/12] time 0.555 (0.635) data 0.000 (0.076) loss 0.4780 (0.4716) acc 81.2500 (87.5000) lr 4.1221e-04 eta 0:00:33
+epoch [16/20] batch [8/12] time 0.558 (0.625) data 0.000 (0.066) loss 0.5195 (0.4776) acc 90.6250 (87.8906) lr 4.1221e-04 eta 0:00:32
+epoch [16/20] batch [9/12] time 0.558 (0.618) data 0.000 (0.059) loss 0.4890 (0.4789) acc 78.1250 (86.8056) lr 4.1221e-04 eta 0:00:31
+epoch [16/20] batch [10/12] time 0.558 (0.612) data 0.000 (0.053) loss 0.3794 (0.4689) acc 90.6250 (87.1875) lr 4.1221e-04 eta 0:00:30
+epoch [16/20] batch [11/12] time 0.556 (0.607) data 0.000 (0.048) loss 0.4622 (0.4683) acc 84.3750 (86.9318) lr 4.1221e-04 eta 0:00:29
+epoch [16/20] batch [12/12] time 0.557 (0.602) data 0.000 (0.044) loss 0.6699 (0.4851) acc 84.3750 (86.7188) lr 2.9289e-04 eta 0:00:28
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-16
+epoch [17/20] batch [1/12] time 1.150 (1.150) data 0.593 (0.593) loss 0.4702 (0.4702) acc 81.2500 (81.2500) lr 2.9289e-04 eta 0:00:54
+epoch [17/20] batch [2/12] time 0.560 (0.855) data 0.000 (0.297) loss 0.4749 (0.4725) acc 81.2500 (81.2500) lr 2.9289e-04 eta 0:00:39
+epoch [17/20] batch [3/12] time 0.558 (0.756) data 0.000 (0.198) loss 0.4277 (0.4576) acc 84.3750 (82.2917) lr 2.9289e-04 eta 0:00:34
+epoch [17/20] batch [4/12] time 0.557 (0.706) data 0.000 (0.148) loss 0.5405 (0.4783) acc 84.3750 (82.8125) lr 2.9289e-04 eta 0:00:31
+epoch [17/20] batch [5/12] time 0.558 (0.677) data 0.000 (0.119) loss 0.4890 (0.4805) acc 81.2500 (82.5000) lr 2.9289e-04 eta 0:00:29
+epoch [17/20] batch [6/12] time 0.560 (0.657) data 0.000 (0.099) loss 0.5278 (0.4884) acc 84.3750 (82.8125) lr 2.9289e-04 eta 0:00:27
+epoch [17/20] batch [7/12] time 0.555 (0.643) data 0.000 (0.085) loss 0.6997 (0.5186) acc 78.1250 (82.1429) lr 2.9289e-04 eta 0:00:26
+epoch [17/20] batch [8/12] time 0.564 (0.633) data 0.000 (0.074) loss 0.4089 (0.5049) acc 90.6250 (83.2031) lr 2.9289e-04 eta 0:00:25
+epoch [17/20] batch [9/12] time 0.561 (0.625) data 0.000 (0.066) loss 0.3440 (0.4870) acc 93.7500 (84.3750) lr 2.9289e-04 eta 0:00:24
+epoch [17/20] batch [10/12] time 0.559 (0.618) data 0.000 (0.059) loss 0.2830 (0.4666) acc 90.6250 (85.0000) lr 2.9289e-04 eta 0:00:23
+epoch [17/20] batch [11/12] time 0.563 (0.613) data 0.000 (0.054) loss 0.5532 (0.4745) acc 84.3750 (84.9432) lr 2.9289e-04 eta 0:00:22
+epoch [17/20] batch [12/12] time 0.559 (0.609) data 0.000 (0.050) loss 0.3896 (0.4674) acc 90.6250 (85.4167) lr 1.9098e-04 eta 0:00:21
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-17
+epoch [18/20] batch [1/12] time 1.081 (1.081) data 0.521 (0.521) loss 0.3726 (0.3726) acc 87.5000 (87.5000) lr 1.9098e-04 eta 0:00:37
+epoch [18/20] batch [2/12] time 0.552 (0.817) data 0.000 (0.260) loss 0.5449 (0.4587) acc 87.5000 (87.5000) lr 1.9098e-04 eta 0:00:27
+epoch [18/20] batch [3/12] time 0.561 (0.731) data 0.000 (0.174) loss 0.4990 (0.4722) acc 84.3750 (86.4583) lr 1.9098e-04 eta 0:00:24
+epoch [18/20] batch [4/12] time 0.564 (0.689) data 0.000 (0.130) loss 0.3374 (0.4385) acc 87.5000 (86.7188) lr 1.9098e-04 eta 0:00:22
+epoch [18/20] batch [5/12] time 0.558 (0.663) data 0.000 (0.104) loss 0.5459 (0.4600) acc 81.2500 (85.6250) lr 1.9098e-04 eta 0:00:20
+epoch [18/20] batch [6/12] time 0.556 (0.645) data 0.000 (0.087) loss 0.3340 (0.4390) acc 84.3750 (85.4167) lr 1.9098e-04 eta 0:00:19
+epoch [18/20] batch [7/12] time 0.558 (0.633) data 0.000 (0.074) loss 0.2793 (0.4162) acc 90.6250 (86.1607) lr 1.9098e-04 eta 0:00:18
+epoch [18/20] batch [8/12] time 0.563 (0.624) data 0.000 (0.065) loss 0.4275 (0.4176) acc 84.3750 (85.9375) lr 1.9098e-04 eta 0:00:17
+epoch [18/20] batch [9/12] time 0.560 (0.617) data 0.000 (0.058) loss 0.4082 (0.4165) acc 84.3750 (85.7639) lr 1.9098e-04 eta 0:00:16
+epoch [18/20] batch [10/12] time 0.562 (0.612) data 0.000 (0.052) loss 0.4751 (0.4224) acc 81.2500 (85.3125) lr 1.9098e-04 eta 0:00:15
+epoch [18/20] batch [11/12] time 0.558 (0.607) data 0.000 (0.047) loss 0.2917 (0.4105) acc 87.5000 (85.5114) lr 1.9098e-04 eta 0:00:15
+epoch [18/20] batch [12/12] time 0.561 (0.603) data 0.000 (0.044) loss 0.3496 (0.4054) acc 90.6250 (85.9375) lr 1.0899e-04 eta 0:00:14
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-18
+epoch [19/20] batch [1/12] time 1.095 (1.095) data 0.525 (0.525) loss 0.5166 (0.5166) acc 87.5000 (87.5000) lr 1.0899e-04 eta 0:00:25
+epoch [19/20] batch [2/12] time 0.562 (0.829) data 0.000 (0.263) loss 0.4854 (0.5010) acc 84.3750 (85.9375) lr 1.0899e-04 eta 0:00:18
+epoch [19/20] batch [3/12] time 0.564 (0.741) data 0.000 (0.175) loss 0.2153 (0.4058) acc 96.8750 (89.5833) lr 1.0899e-04 eta 0:00:15
+epoch [19/20] batch [4/12] time 0.560 (0.695) data 0.000 (0.131) loss 0.3740 (0.3978) acc 93.7500 (90.6250) lr 1.0899e-04 eta 0:00:13
+epoch [19/20] batch [5/12] time 0.565 (0.669) data 0.000 (0.105) loss 0.5566 (0.4296) acc 81.2500 (88.7500) lr 1.0899e-04 eta 0:00:12
+epoch [19/20] batch [6/12] time 0.558 (0.651) data 0.000 (0.088) loss 0.4380 (0.4310) acc 87.5000 (88.5417) lr 1.0899e-04 eta 0:00:11
+epoch [19/20] batch [7/12] time 0.559 (0.638) data 0.000 (0.075) loss 0.2998 (0.4122) acc 96.8750 (89.7321) lr 1.0899e-04 eta 0:00:10
+epoch [19/20] batch [8/12] time 0.558 (0.628) data 0.000 (0.066) loss 0.4395 (0.4156) acc 87.5000 (89.4531) lr 1.0899e-04 eta 0:00:10
+epoch [19/20] batch [9/12] time 0.560 (0.620) data 0.000 (0.059) loss 0.3333 (0.4065) acc 84.3750 (88.8889) lr 1.0899e-04 eta 0:00:09
+epoch [19/20] batch [10/12] time 0.559 (0.614) data 0.000 (0.053) loss 0.5933 (0.4252) acc 78.1250 (87.8125) lr 1.0899e-04 eta 0:00:08
+epoch [19/20] batch [11/12] time 0.556 (0.609) data 0.000 (0.048) loss 0.5220 (0.4340) acc 81.2500 (87.2159) lr 1.0899e-04 eta 0:00:07
+epoch [19/20] batch [12/12] time 0.559 (0.605) data 0.000 (0.044) loss 0.4753 (0.4374) acc 81.2500 (86.7188) lr 4.8943e-05 eta 0:00:07
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-19
+epoch [20/20] batch [1/12] time 1.179 (1.179) data 0.623 (0.623) loss 0.4194 (0.4194) acc 90.6250 (90.6250) lr 4.8943e-05 eta 0:00:12
+epoch [20/20] batch [2/12] time 0.561 (0.870) data 0.000 (0.312) loss 0.3726 (0.3960) acc 81.2500 (85.9375) lr 4.8943e-05 eta 0:00:08
+epoch [20/20] batch [3/12] time 0.560 (0.767) data 0.000 (0.208) loss 0.6543 (0.4821) acc 81.2500 (84.3750) lr 4.8943e-05 eta 0:00:06
+epoch [20/20] batch [4/12] time 0.564 (0.716) data 0.000 (0.156) loss 0.4863 (0.4832) acc 87.5000 (85.1562) lr 4.8943e-05 eta 0:00:05
+epoch [20/20] batch [5/12] time 0.561 (0.685) data 0.000 (0.125) loss 0.6484 (0.5162) acc 68.7500 (81.8750) lr 4.8943e-05 eta 0:00:04
+epoch [20/20] batch [6/12] time 0.558 (0.664) data 0.000 (0.104) loss 0.3894 (0.4951) acc 96.8750 (84.3750) lr 4.8943e-05 eta 0:00:03
+epoch [20/20] batch [7/12] time 0.561 (0.649) data 0.000 (0.089) loss 0.4922 (0.4947) acc 87.5000 (84.8214) lr 4.8943e-05 eta 0:00:03
+epoch [20/20] batch [8/12] time 0.563 (0.639) data 0.000 (0.078) loss 0.4402 (0.4879) acc 90.6250 (85.5469) lr 4.8943e-05 eta 0:00:02
+epoch [20/20] batch [9/12] time 0.558 (0.630) data 0.000 (0.069) loss 0.3926 (0.4773) acc 84.3750 (85.4167) lr 4.8943e-05 eta 0:00:01
+epoch [20/20] batch [10/12] time 0.556 (0.622) data 0.000 (0.062) loss 0.3245 (0.4620) acc 90.6250 (85.9375) lr 4.8943e-05 eta 0:00:01
+epoch [20/20] batch [11/12] time 0.559 (0.616) data 0.000 (0.057) loss 0.4285 (0.4589) acc 90.6250 (86.3636) lr 4.8943e-05 eta 0:00:00
+epoch [20/20] batch [12/12] time 0.560 (0.612) data 0.000 (0.052) loss 0.6050 (0.4711) acc 84.3750 (86.1979) lr 1.2312e-05 eta 0:00:00
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_20/seed2/prompt_learner/model.pth.tar-20
+Finish training
+Deploy the last-epoch model
+Evaluate on the *test* set
+=> result
+* total: 864
+* correct: 671
+* accuracy: 77.662%
+* error: 22.34%
+* macro_f1: 77.45%
+Elapsed: 0:02:42

@@ -1,0 +1,411 @@
+***************
+** Arguments **
+***************
+backbone: 
+config_file: configs/trainers/CoOp/vit_b16.yaml
+dataset_config_file: configs/datasets/dtd.yaml
+eval_only: False
+head: 
+load_epoch: None
+model_dir: 
+no_train: False
+opts: ['TRAINER.COOP.N_CTX', '2', 'TRAINER.COOP.CSC', 'False', 'TRAINER.COOP.CLASS_TOKEN_POSITION', 'end', 'DATASET.NUM_SHOTS', '16', 'DATASET.SUBSAMPLE_CLASSES', 'base', 'TRAINER.ATPROMPT.USE_ATPROMPT', 'True', 'TRAINER.ATPROMPT.N_ATT1', '2', 'TRAINER.ATPROMPT.N_ATT2', '2', 'TRAINER.ATPROMPT.N_ATT3', '2', 'OPTIM.MAX_EPOCH', '10', 'TRAIN.CHECKPOINT_FREQ', '1']
+output_dir: output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_10/seed2
+resume: 
+root: /root/prompt_dataset
+seed: 2
+source_domains: None
+target_domains: None
+trainer: CoOp_ATP
+transforms: None
+************
+** Config **
+************
+DATALOADER:
+  K_TRANSFORMS: 1
+  NUM_WORKERS: 8
+  RETURN_IMG0: False
+  TEST:
+    BATCH_SIZE: 50
+    SAMPLER: SequentialSampler
+  TRAIN_U:
+    BATCH_SIZE: 32
+    N_DOMAIN: 0
+    N_INS: 16
+    SAME_AS_X: True
+    SAMPLER: RandomSampler
+  TRAIN_X:
+    BATCH_SIZE: 16
+    N_DOMAIN: 0
+    N_INS: 16
+    SAMPLER: RandomSampler
+DATASET:
+  ALL_AS_UNLABELED: False
+  CIFAR_C_LEVEL: 1
+  CIFAR_C_TYPE: 
+  NAME: DescribableTextures
+  NUM_LABELED: -1
+  NUM_SHOTS: 16
+  ROOT: /root/prompt_dataset
+  SOURCE_DOMAINS: ()
+  STL10_FOLD: -1
+  SUBSAMPLE_CLASSES: base
+  TARGET_DOMAINS: ()
+  VAL_PERCENT: 0.1
+INPUT:
+  COLORJITTER_B: 0.4
+  COLORJITTER_C: 0.4
+  COLORJITTER_H: 0.1
+  COLORJITTER_S: 0.4
+  CROP_PADDING: 4
+  CUTOUT_LEN: 16
+  CUTOUT_N: 1
+  GB_K: 21
+  GB_P: 0.5
+  GN_MEAN: 0.0
+  GN_STD: 0.15
+  INTERPOLATION: bicubic
+  NO_TRANSFORM: False
+  PIXEL_MEAN: [0.48145466, 0.4578275, 0.40821073]
+  PIXEL_STD: [0.26862954, 0.26130258, 0.27577711]
+  RANDAUGMENT_M: 10
+  RANDAUGMENT_N: 2
+  RGS_P: 0.2
+  RRCROP_SCALE: (0.08, 1.0)
+  SIZE: (224, 224)
+  TRANSFORMS: ('random_resized_crop', 'random_flip', 'normalize')
+MODEL:
+  BACKBONE:
+    NAME: ViT-B/16
+    PRETRAINED: True
+  HEAD:
+    ACTIVATION: relu
+    BN: True
+    DROPOUT: 0.0
+    HIDDEN_LAYERS: ()
+    NAME: 
+  INIT_WEIGHTS: 
+OPTIM:
+  ADAM_BETA1: 0.9
+  ADAM_BETA2: 0.999
+  BASE_LR_MULT: 0.1
+  GAMMA: 0.1
+  LR: 0.002
+  LR_SCHEDULER: cosine
+  MAX_EPOCH: 10
+  MOMENTUM: 0.9
+  NAME: sgd
+  NEW_LAYERS: ()
+  RMSPROP_ALPHA: 0.99
+  SGD_DAMPNING: 0
+  SGD_NESTEROV: False
+  STAGED_LR: False
+  STEPSIZE: (-1,)
+  WARMUP_CONS_LR: 1e-05
+  WARMUP_EPOCH: 1
+  WARMUP_MIN_LR: 1e-05
+  WARMUP_RECOUNT: True
+  WARMUP_TYPE: constant
+  WEIGHT_DECAY: 0.0005
+OUTPUT_DIR: output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_10/seed2
+RESUME: 
+SEED: 2
+TEST:
+  COMPUTE_CMAT: False
+  EVALUATOR: Classification
+  FINAL_MODEL: last_step
+  NO_TEST: False
+  PER_CLASS_RESULT: False
+  SPLIT: test
+TRAIN:
+  CHECKPOINT_FREQ: 1
+  COUNT_ITER: train_x
+  PRINT_FREQ: 20
+TRAINER:
+  ATPROMPT:
+    ATT1_TEXT: pattern
+    ATT2_TEXT: color
+    ATT3_TEXT: design
+    ATT_NUM: 3
+    N_ATT1: 2
+    N_ATT2: 2
+    N_ATT3: 2
+    USE_ATPROMPT: True
+  CDAC:
+    CLASS_LR_MULTI: 10
+    P_THRESH: 0.95
+    RAMPUP_COEF: 30
+    RAMPUP_ITRS: 1000
+    STRONG_TRANSFORMS: ()
+    TOPK_MATCH: 5
+  COCOOP:
+    CTX_INIT: 
+    N_CTX: 16
+    PREC: fp16
+  COOP:
+    CLASS_TOKEN_POSITION: end
+    CSC: False
+    CTX_INIT: False
+    N_CTX: 2
+    PREC: fp16
+    W: 2.0
+  CROSSGRAD:
+    ALPHA_D: 0.5
+    ALPHA_F: 0.5
+    EPS_D: 1.0
+    EPS_F: 1.0
+  DAEL:
+    CONF_THRE: 0.95
+    STRONG_TRANSFORMS: ()
+    WEIGHT_U: 0.5
+  DAELDG:
+    CONF_THRE: 0.95
+    STRONG_TRANSFORMS: ()
+    WEIGHT_U: 0.5
+  DDAIG:
+    ALPHA: 0.5
+    CLAMP: False
+    CLAMP_MAX: 1.0
+    CLAMP_MIN: -1.0
+    G_ARCH: 
+    LMDA: 0.3
+    WARMUP: 0
+  DOMAINMIX:
+    ALPHA: 1.0
+    BETA: 1.0
+    TYPE: crossdomain
+  ENTMIN:
+    LMDA: 0.001
+  FILM:
+    LINEAR_PROBE: True
+  FIXMATCH:
+    CONF_THRE: 0.95
+    STRONG_TRANSFORMS: ()
+    WEIGHT_U: 1.0
+  IVLP:
+    CTX_INIT: a photo of a
+    IMG_WEIGHT: 0.5
+    N_CTX_TEXT: 2
+    N_CTX_VISION: 2
+    PREC: fp16
+    PROMPT_DEPTH_TEXT: 9
+    PROMPT_DEPTH_VISION: 9
+  LINEAR_PROBE:
+    TEST_TIME_FUSION: True
+    TYPE: linear
+    WEIGHT: 0.7
+  M3SDA:
+    LMDA: 0.5
+    N_STEP_F: 4
+  MAPLE:
+    CTX_INIT: a photo of a
+    N_CTX: 2
+    PREC: fp16
+    PROMPT_DEPTH: 9
+  MCD:
+    N_STEP_F: 4
+  MEANTEACHER:
+    EMA_ALPHA: 0.999
+    RAMPUP: 5
+    WEIGHT_U: 1.0
+  MIXMATCH:
+    MIXUP_BETA: 0.75
+    RAMPUP: 20000
+    TEMP: 2.0
+    WEIGHT_U: 100.0
+  MME:
+    LMDA: 0.1
+  NAME: CoOp_ATP
+  NAMES_TO_UPDATE: ['prompt_learner', 'linear_probe', 'film']
+  PROMPTSRC:
+    CTX_INIT: 
+    GPA_MEAN: 15
+    GPA_STD: 1
+    IMAGE_LOSS_WEIGHT: 10
+    N_CTX_TEXT: 4
+    N_CTX_VISION: 4
+    PREC: fp16
+    PROMPT_DEPTH_TEXT: 9
+    PROMPT_DEPTH_VISION: 9
+    TEXT_LOSS_WEIGHT: 25
+  SE:
+    CONF_THRE: 0.95
+    EMA_ALPHA: 0.999
+    RAMPUP: 300
+USE_CUDA: True
+VERBOSE: True
+VERSION: 1
+Loading trainer: CoOp_ATP
+
+=== DATALOADER DUMP (test) ===
+cfg.DATASET.NAME: DescribableTextures
+cfg.DATASET.SUBSAMPLE_CLASSES: base
+cfg.DATASET.NUM_SHOTS: 16
+cfg.INPUT.SIZE: (224, 224)
+No loader found for test
+
+=== DATALOADER DUMP (train) ===
+cfg.DATASET.NAME: DescribableTextures
+cfg.DATASET.SUBSAMPLE_CLASSES: base
+cfg.DATASET.NUM_SHOTS: 16
+cfg.INPUT.SIZE: (224, 224)
+No loader found for train
+=== 开始执行 build_data_loader，准备统计样本数 ===
+Loading dataset: DescribableTextures
+Reading split from /root/prompt_dataset/dtd/split_zhou_DescribableTextures.json
+Loading preprocessed few-shot data from /root/prompt_dataset/dtd/split_fewshot/shot_16-seed_2.pkl
+SUBSAMPLE BASE CLASSES!
+Building transform_train
++ random resized crop (size=(224, 224), scale=(0.08, 1.0))
++ random flip
++ normalization (mean=[0.48145466, 0.4578275, 0.40821073], std=[0.26862954, 0.26130258, 0.27577711])
+Building transform_test
+
+===== 数据集原始长度信息 =====
+测试集原始长度 (len(dataset.test)): 864
+训练集原始长度 (len(dataset.train_x)): 384
+类别数: 24
+SUBSAMPLE_CLASSES 配置: base
+=============================
+
+统计样本数时出错: 'list' object has no attribute 'data_list'
+train_loader_x 的 batch 数: 24
+单个 batch 样本数: 16
+train_loader_x 总样本数（batch数 × batch_size）: 384
+train_loader_x.dataset 长度: 24
+Loading CLIP (backbone: ViT-B/16)
+Initializing a generic context
+self.use_atp is True
+self.atp_num is 3
+Initial context: "X X"
+Number of context words (tokens): 2
+USE ATPROPMT-ING 1
+['X X pattern X X color X X design X X banded.', 'X X pattern X X color X X design X X blotchy.', 'X X pattern X X color X X design X X braided.', 'X X pattern X X color X X design X X bubbly.', 'X X pattern X X color X X design X X bumpy.', 'X X pattern X X color X X design X X chequered.', 'X X pattern X X color X X design X X cobwebbed.', 'X X pattern X X color X X design X X cracked.', 'X X pattern X X color X X design X X crosshatched.', 'X X pattern X X color X X design X X crystalline.', 'X X pattern X X color X X design X X dotted.', 'X X pattern X X color X X design X X fibrous.', 'X X pattern X X color X X design X X flecked.', 'X X pattern X X color X X design X X freckled.', 'X X pattern X X color X X design X X frilly.', 'X X pattern X X color X X design X X gauzy.', 'X X pattern X X color X X design X X grid.', 'X X pattern X X color X X design X X grooved.', 'X X pattern X X color X X design X X honeycombed.', 'X X pattern X X color X X design X X interlaced.', 'X X pattern X X color X X design X X knitted.', 'X X pattern X X color X X design X X lacelike.', 'X X pattern X X color X X design X X lined.', 'X X pattern X X color X X design X X marbled.']
+embedding shape is [24,77,512,]
+USE ATPROPMT-ING 2
+
+===== 开始构建优化器 =====
+优化器类型: sgd
+学习率 (LR): 0.002
+权重衰减 (WEIGHT_DECAY): 0.0005
+参数组 (param_groups) 为None，开始自动构建参数组...
+不启用分段学习率，使用模型所有参数...
+参数组总参数数量: 10
+
+开始初始化优化器: sgd
+SGD参数 - 学习率: 0.002, 动量: 0.9, 权重衰减: 0.0005
+优化器构建成功: SGD
+===== 优化器构建结束 =====
+
+=== 开始执行 build_data_loader，准备统计样本数 ===
+Loading dataset: DescribableTextures
+Reading split from /root/prompt_dataset/dtd/split_zhou_DescribableTextures.json
+Loading preprocessed few-shot data from /root/prompt_dataset/dtd/split_fewshot/shot_16-seed_2.pkl
+SUBSAMPLE BASE CLASSES!
+
+===== 数据集原始长度信息 =====
+测试集原始长度 (len(dataset.test)): 864
+训练集原始长度 (len(dataset.train_x)): 384
+类别数: 24
+SUBSAMPLE_CLASSES 配置: base
+=============================
+
+统计样本数时出错: 'list' object has no attribute 'data_list'
+train_loader_x 的 batch 数: 24
+单个 batch 样本数: 16
+train_loader_x 总样本数（batch数 × batch_size）: 384
+train_loader_x.dataset 长度: 24
+Loading evaluator: Classification
+未找到 checkpoint，从头训练
+train_loader_x长度（batch数）: 24
+单个batch样本数: 16
+训练集总样本数: 24
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.001951
+epoch [1/10] batch [20/24] time 19.335 (16.691) data 19.068 (15.905) loss 0.8140 (1.5640) acc 62.5000 (58.7500) lr 1.9511e-03 eta 1:01:12
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 24}
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_10/seed2/prompt_learner/model.pth.tar-1
+train_loader_x长度（batch数）: 24
+单个batch样本数: 16
+训练集总样本数: 24
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.001309
+epoch [2/10] batch [20/24] time 5.389 (2.834) data 5.121 (2.566) loss 2.1334 (1.0273) acc 50.0000 (73.7500) lr 1.3094e-03 eta 0:09:15
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 49}
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_10/seed2/prompt_learner/model.pth.tar-2
+train_loader_x长度（batch数）: 24
+单个batch样本数: 16
+训练集总样本数: 24
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000050
+epoch [3/10] batch [20/24] time 5.395 (2.830) data 5.125 (2.561) loss 0.6147 (0.7216) acc 87.5000 (79.0625) lr 4.9919e-05 eta 0:08:06
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 74}
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_10/seed2/prompt_learner/model.pth.tar-3
+train_loader_x长度（batch数）: 24
+单个batch样本数: 16
+训练集总样本数: 24
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000692
+epoch [4/10] batch [20/24] time 5.408 (2.841) data 5.139 (2.572) loss 0.3993 (0.5463) acc 81.2500 (82.8125) lr 6.9164e-04 eta 0:07:00
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 99}
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_10/seed2/prompt_learner/model.pth.tar-4
+train_loader_x长度（batch数）: 24
+单个batch样本数: 16
+训练集总样本数: 24
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.001951
+epoch [5/10] batch [20/24] time 5.419 (2.847) data 5.148 (2.577) loss 0.2532 (0.4023) acc 87.5000 (88.1250) lr 1.9511e-03 eta 0:05:53
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 124}
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_10/seed2/prompt_learner/model.pth.tar-5
+train_loader_x长度（batch数）: 24
+单个batch样本数: 16
+训练集总样本数: 24
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.001309
+epoch [6/10] batch [20/24] time 5.398 (2.836) data 5.131 (2.567) loss 0.3490 (0.2408) acc 87.5000 (94.3750) lr 1.3094e-03 eta 0:04:43
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 149}
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_10/seed2/prompt_learner/model.pth.tar-6
+train_loader_x长度（batch数）: 24
+单个batch样本数: 16
+训练集总样本数: 24
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000050
+epoch [7/10] batch [20/24] time 5.439 (2.850) data 5.165 (2.580) loss 0.6774 (0.2059) acc 75.0000 (93.1250) lr 4.9919e-05 eta 0:03:36
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 174}
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_10/seed2/prompt_learner/model.pth.tar-7
+train_loader_x长度（batch数）: 24
+单个batch样本数: 16
+训练集总样本数: 24
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000692
+epoch [8/10] batch [20/24] time 5.410 (2.847) data 5.143 (2.578) loss 0.0698 (0.2162) acc 100.0000 (94.3750) lr 6.9164e-04 eta 0:02:28
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 199}
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_10/seed2/prompt_learner/model.pth.tar-8
+train_loader_x长度（batch数）: 24
+单个batch样本数: 16
+训练集总样本数: 24
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.001951
+epoch [9/10] batch [20/24] time 5.410 (2.844) data 5.141 (2.575) loss 0.1098 (0.1740) acc 100.0000 (94.6875) lr 1.9511e-03 eta 0:01:19
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 224}
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_10/seed2/prompt_learner/model.pth.tar-9
+train_loader_x长度（batch数）: 24
+单个batch样本数: 16
+训练集总样本数: 24
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.001309
+epoch [10/10] batch [20/24] time 5.425 (2.846) data 5.152 (2.576) loss 0.0799 (0.1324) acc 100.0000 (96.5625) lr 1.3094e-03 eta 0:00:11
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 249}
+Checkpoint saved to output/dtd/CoOp_ATP/vit_b16_16shots/nctx2_cscFalse_ctpend/CTX_2_epo_10/seed2/prompt_learner/model.pth.tar-10
+训练完成
+加载最后一轮模型
+=== 验证类别列表 ===
+
+在 *test* 集上评估
+=> result
+* total: 864
+* correct: 661
+* accuracy: 76.505%
+* error: 23.50%
+* macro_f1: 75.97%
+耗时: 0:01:33

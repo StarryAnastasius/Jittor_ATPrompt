@@ -1,0 +1,983 @@
+***************
+** Arguments **
+***************
+backbone: 
+config_file: configs/trainers/CoOp/vit_b16.yaml
+dataset_config_file: configs/datasets/caltech101.yaml
+eval_only: False
+head: 
+load_epoch: None
+model_dir: 
+no_train: False
+opts: ['TRAINER.COOP.N_CTX', '4', 'TRAINER.COOP.CSC', 'False', 'TRAINER.COOP.CLASS_TOKEN_POSITION', 'end', 'DATASET.NUM_SHOTS', '16', 'DATASET.SUBSAMPLE_CLASSES', 'base', 'TRAINER.ATPROMPT.USE_ATPROMPT', 'True', 'TRAINER.ATPROMPT.N_ATT1', '4', 'TRAINER.ATPROMPT.N_ATT2', '4', 'TRAINER.ATPROMPT.N_ATT3', '4', 'OPTIM.MAX_EPOCH', '25', 'TRAIN.CHECKPOINT_FREQ', '1']
+output_dir: output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2
+resume: 
+root: /root/prompt_dataset
+seed: 2
+source_domains: None
+target_domains: None
+trainer: CoOp_ATP
+transforms: None
+************
+** Config **
+************
+DATALOADER:
+  K_TRANSFORMS: 1
+  NUM_WORKERS: 8
+  RETURN_IMG0: False
+  TEST:
+    BATCH_SIZE: 50
+    SAMPLER: SequentialSampler
+  TRAIN_U:
+    BATCH_SIZE: 32
+    N_DOMAIN: 0
+    N_INS: 16
+    SAME_AS_X: True
+    SAMPLER: RandomSampler
+  TRAIN_X:
+    BATCH_SIZE: 4
+    N_DOMAIN: 0
+    N_INS: 16
+    SAMPLER: RandomSampler
+DATASET:
+  ALL_AS_UNLABELED: False
+  CIFAR_C_LEVEL: 1
+  CIFAR_C_TYPE: 
+  NAME: Caltech101
+  NUM_LABELED: -1
+  NUM_SHOTS: 16
+  ROOT: /root/prompt_dataset
+  SOURCE_DOMAINS: ()
+  STL10_FOLD: -1
+  SUBSAMPLE_CLASSES: base
+  TARGET_DOMAINS: ()
+  VAL_PERCENT: 0.1
+INPUT:
+  COLORJITTER_B: 0.4
+  COLORJITTER_C: 0.4
+  COLORJITTER_H: 0.1
+  COLORJITTER_S: 0.4
+  CROP_PADDING: 4
+  CUTOUT_LEN: 16
+  CUTOUT_N: 1
+  GB_K: 21
+  GB_P: 0.5
+  GN_MEAN: 0.0
+  GN_STD: 0.15
+  INTERPOLATION: bicubic
+  NO_TRANSFORM: False
+  PIXEL_MEAN: [0.48145466, 0.4578275, 0.40821073]
+  PIXEL_STD: [0.26862954, 0.26130258, 0.27577711]
+  RANDAUGMENT_M: 10
+  RANDAUGMENT_N: 2
+  RGS_P: 0.2
+  RRCROP_SCALE: (0.08, 1.0)
+  SIZE: (224, 224)
+  TRANSFORMS: ('random_resized_crop', 'random_flip', 'normalize')
+MODEL:
+  BACKBONE:
+    NAME: ViT-B/16
+    PRETRAINED: True
+  HEAD:
+    ACTIVATION: relu
+    BN: True
+    DROPOUT: 0.0
+    HIDDEN_LAYERS: ()
+    NAME: 
+  INIT_WEIGHTS: 
+OPTIM:
+  ADAM_BETA1: 0.9
+  ADAM_BETA2: 0.999
+  BASE_LR_MULT: 0.1
+  GAMMA: 0.1
+  LR: 0.002
+  LR_SCHEDULER: cosine
+  MAX_EPOCH: 25
+  MOMENTUM: 0.9
+  NAME: sgd
+  NEW_LAYERS: ()
+  RMSPROP_ALPHA: 0.99
+  SGD_DAMPNING: 0
+  SGD_NESTEROV: False
+  STAGED_LR: False
+  STEPSIZE: (-1,)
+  WARMUP_CONS_LR: 1e-05
+  WARMUP_EPOCH: 1
+  WARMUP_MIN_LR: 1e-05
+  WARMUP_RECOUNT: True
+  WARMUP_TYPE: constant
+  WEIGHT_DECAY: 0.0005
+OUTPUT_DIR: output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2
+RESUME: 
+SEED: 2
+TEST:
+  COMPUTE_CMAT: False
+  EVALUATOR: Classification
+  FINAL_MODEL: last_step
+  NO_TEST: False
+  PER_CLASS_RESULT: False
+  SPLIT: test
+TRAIN:
+  CHECKPOINT_FREQ: 1
+  COUNT_ITER: train_x
+  PRINT_FREQ: 20
+TRAINER:
+  ATPROMPT:
+    ATT1_TEXT: shape
+    ATT2_TEXT: size
+    ATT3_TEXT: none
+    ATT_NUM: 2
+    N_ATT1: 4
+    N_ATT2: 4
+    N_ATT3: 4
+    USE_ATPROMPT: True
+  CDAC:
+    CLASS_LR_MULTI: 10
+    P_THRESH: 0.95
+    RAMPUP_COEF: 30
+    RAMPUP_ITRS: 1000
+    STRONG_TRANSFORMS: ()
+    TOPK_MATCH: 5
+  COCOOP:
+    CTX_INIT: 
+    N_CTX: 16
+    PREC: fp16
+  COOP:
+    CLASS_TOKEN_POSITION: end
+    CSC: False
+    CTX_INIT: False
+    N_CTX: 4
+    PREC: fp16
+    W: 2.0
+  CROSSGRAD:
+    ALPHA_D: 0.5
+    ALPHA_F: 0.5
+    EPS_D: 1.0
+    EPS_F: 1.0
+  DAEL:
+    CONF_THRE: 0.95
+    STRONG_TRANSFORMS: ()
+    WEIGHT_U: 0.5
+  DAELDG:
+    CONF_THRE: 0.95
+    STRONG_TRANSFORMS: ()
+    WEIGHT_U: 0.5
+  DDAIG:
+    ALPHA: 0.5
+    CLAMP: False
+    CLAMP_MAX: 1.0
+    CLAMP_MIN: -1.0
+    G_ARCH: 
+    LMDA: 0.3
+    WARMUP: 0
+  DOMAINMIX:
+    ALPHA: 1.0
+    BETA: 1.0
+    TYPE: crossdomain
+  ENTMIN:
+    LMDA: 0.001
+  FILM:
+    LINEAR_PROBE: True
+  FIXMATCH:
+    CONF_THRE: 0.95
+    STRONG_TRANSFORMS: ()
+    WEIGHT_U: 1.0
+  IVLP:
+    CTX_INIT: a photo of a
+    IMG_WEIGHT: 0.5
+    N_CTX_TEXT: 2
+    N_CTX_VISION: 2
+    PREC: fp16
+    PROMPT_DEPTH_TEXT: 9
+    PROMPT_DEPTH_VISION: 9
+  LINEAR_PROBE:
+    TEST_TIME_FUSION: True
+    TYPE: linear
+    WEIGHT: 0.7
+  M3SDA:
+    LMDA: 0.5
+    N_STEP_F: 4
+  MAPLE:
+    CTX_INIT: a photo of a
+    N_CTX: 2
+    PREC: fp16
+    PROMPT_DEPTH: 9
+  MCD:
+    N_STEP_F: 4
+  MEANTEACHER:
+    EMA_ALPHA: 0.999
+    RAMPUP: 5
+    WEIGHT_U: 1.0
+  MIXMATCH:
+    MIXUP_BETA: 0.75
+    RAMPUP: 20000
+    TEMP: 2.0
+    WEIGHT_U: 100.0
+  MME:
+    LMDA: 0.1
+  NAME: CoOp_ATP
+  NAMES_TO_UPDATE: ['prompt_learner', 'linear_probe', 'film']
+  PROMPTSRC:
+    CTX_INIT: 
+    GPA_MEAN: 15
+    GPA_STD: 1
+    IMAGE_LOSS_WEIGHT: 10
+    N_CTX_TEXT: 4
+    N_CTX_VISION: 4
+    PREC: fp16
+    PROMPT_DEPTH_TEXT: 9
+    PROMPT_DEPTH_VISION: 9
+    TEXT_LOSS_WEIGHT: 25
+  SE:
+    CONF_THRE: 0.95
+    EMA_ALPHA: 0.999
+    RAMPUP: 300
+USE_CUDA: True
+VERBOSE: True
+VERSION: 1
+Loading trainer: CoOp_ATP
+
+=== DATALOADER DUMP (test) ===
+cfg.DATASET.NAME: Caltech101
+cfg.DATASET.SUBSAMPLE_CLASSES: base
+cfg.DATASET.NUM_SHOTS: 16
+cfg.INPUT.SIZE: (224, 224)
+No loader found for test
+
+=== DATALOADER DUMP (train) ===
+cfg.DATASET.NAME: Caltech101
+cfg.DATASET.SUBSAMPLE_CLASSES: base
+cfg.DATASET.NUM_SHOTS: 16
+cfg.INPUT.SIZE: (224, 224)
+No loader found for train
+=== 开始执行 build_data_loader，准备统计样本数 ===
+Loading dataset: Caltech101
+Reading split from /root/prompt_dataset/caltech-101/split_zhou_Caltech101.json
+Loading preprocessed few-shot data from /root/prompt_dataset/caltech-101/split_fewshot/shot_16-seed_2.pkl
+当前 SUBSAMPLE_CLASSES 配置: base
+SUBSAMPLE BASE CLASSES!
+Building transform_train
++ random resized crop (size=(224, 224), scale=(0.08, 1.0))
++ random flip
++ normalization (mean=[0.48145466, 0.4578275, 0.40821073], std=[0.26862954, 0.26130258, 0.27577711])
+Building transform_test
+
+===== 数据集原始长度信息 =====
+测试集原始长度 (len(dataset.test)): 1549
+训练集原始长度 (len(dataset.train_x)): 800
+类别数: 50
+SUBSAMPLE_CLASSES 配置: base
+=============================
+
+统计样本数时出错: 'list' object has no attribute 'data_list'
+train_loader_x 的 batch 数: 200
+单个 batch 样本数: 4
+train_loader_x 总样本数（batch数 × batch_size）: 800
+train_loader_x.dataset 长度: 200
+Loading CLIP (backbone: ViT-B/16)
+Initializing a generic context
+self.use_atp is True
+self.atp_num is 2
+Initial context: "X X X X"
+Number of context words (tokens): 4
+USE ATPROPMT-ING 1
+['X X X X shape X X X X size X X X X face.', 'X X X X shape X X X X size X X X X leopard.', 'X X X X shape X X X X size X X X X motorbike.', 'X X X X shape X X X X size X X X X accordion.', 'X X X X shape X X X X size X X X X airplane.', 'X X X X shape X X X X size X X X X anchor.', 'X X X X shape X X X X size X X X X ant.', 'X X X X shape X X X X size X X X X barrel.', 'X X X X shape X X X X size X X X X bass.', 'X X X X shape X X X X size X X X X beaver.', 'X X X X shape X X X X size X X X X binocular.', 'X X X X shape X X X X size X X X X bonsai.', 'X X X X shape X X X X size X X X X brain.', 'X X X X shape X X X X size X X X X brontosaurus.', 'X X X X shape X X X X size X X X X buddha.', 'X X X X shape X X X X size X X X X butterfly.', 'X X X X shape X X X X size X X X X camera.', 'X X X X shape X X X X size X X X X cannon.', 'X X X X shape X X X X size X X X X car side.', 'X X X X shape X X X X size X X X X ceiling fan.', 'X X X X shape X X X X size X X X X cellphone.', 'X X X X shape X X X X size X X X X chair.', 'X X X X shape X X X X size X X X X chandelier.', 'X X X X shape X X X X size X X X X cougar body.', 'X X X X shape X X X X size X X X X cougar face.', 'X X X X shape X X X X size X X X X crab.', 'X X X X shape X X X X size X X X X crayfish.', 'X X X X shape X X X X size X X X X crocodile.', 'X X X X shape X X X X size X X X X crocodile head.', 'X X X X shape X X X X size X X X X cup.', 'X X X X shape X X X X size X X X X dalmatian.', 'X X X X shape X X X X size X X X X dollar bill.', 'X X X X shape X X X X size X X X X dolphin.', 'X X X X shape X X X X size X X X X dragonfly.', 'X X X X shape X X X X size X X X X electric guitar.', 'X X X X shape X X X X size X X X X elephant.', 'X X X X shape X X X X size X X X X emu.', 'X X X X shape X X X X size X X X X euphonium.', 'X X X X shape X X X X size X X X X ewer.', 'X X X X shape X X X X size X X X X ferry.', 'X X X X shape X X X X size X X X X flamingo.', 'X X X X shape X X X X size X X X X flamingo head.', 'X X X X shape X X X X size X X X X garfield.', 'X X X X shape X X X X size X X X X gerenuk.', 'X X X X shape X X X X size X X X X gramophone.', 'X X X X shape X X X X size X X X X grand piano.', 'X X X X shape X X X X size X X X X hawksbill.', 'X X X X shape X X X X size X X X X headphone.', 'X X X X shape X X X X size X X X X hedgehog.', 'X X X X shape X X X X size X X X X helicopter.']
+embedding shape is [50,77,512,]
+USE ATPROPMT-ING 2
+
+===== 开始构建优化器 =====
+优化器类型: sgd
+学习率 (LR): 0.002
+权重衰减 (WEIGHT_DECAY): 0.0005
+参数组 (param_groups) 为None，开始自动构建参数组...
+不启用分段学习率，使用模型所有参数...
+参数组总参数数量: 9
+
+开始初始化优化器: sgd
+SGD参数 - 学习率: 0.002, 动量: 0.9, 权重衰减: 0.0005
+优化器构建成功: SGD
+===== 优化器构建结束 =====
+
+=== 开始执行 build_data_loader，准备统计样本数 ===
+Loading dataset: Caltech101
+Reading split from /root/prompt_dataset/caltech-101/split_zhou_Caltech101.json
+Loading preprocessed few-shot data from /root/prompt_dataset/caltech-101/split_fewshot/shot_16-seed_2.pkl
+当前 SUBSAMPLE_CLASSES 配置: base
+SUBSAMPLE BASE CLASSES!
+
+===== 数据集原始长度信息 =====
+测试集原始长度 (len(dataset.test)): 1549
+训练集原始长度 (len(dataset.train_x)): 800
+类别数: 50
+SUBSAMPLE_CLASSES 配置: base
+=============================
+
+统计样本数时出错: 'list' object has no attribute 'data_list'
+train_loader_x 的 batch 数: 200
+单个 batch 样本数: 4
+train_loader_x 总样本数（batch数 × batch_size）: 800
+train_loader_x.dataset 长度: 200
+Loading evaluator: Classification
+未找到 checkpoint，从头训练
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000272
+epoch [1/25] batch [20/200] time 9.172 (6.892) data 8.933 (6.623) loss 1.2676 (0.9324) acc 75.0000 (70.0000) lr 2.7190e-04 eta 9:32:01
+[调度器验证] batch 40: 学习率=0.001188
+epoch [1/25] batch [40/200] time 13.942 (9.295) data 13.712 (9.041) loss 0.5538 (0.9833) acc 75.0000 (75.0000) lr 1.1878e-03 eta 12:48:21
+[调度器验证] batch 60: 学习率=0.001426
+epoch [1/25] batch [60/200] time 18.609 (11.660) data 18.377 (11.413) loss 2.8346 (1.0641) acc 50.0000 (74.5833) lr 1.4261e-03 eta 15:59:58
+[调度器验证] batch 80: 学习率=0.000125
+epoch [1/25] batch [80/200] time 23.308 (14.014) data 23.073 (13.771) loss 0.5733 (1.0249) acc 100.0000 (74.3750) lr 1.2463e-04 eta 19:09:10
+[调度器验证] batch 100: 学习率=0.001992
+epoch [1/25] batch [100/200] time 28.028 (16.367) data 27.789 (16.125) loss 0.0272 (1.0097) acc 100.0000 (74.7500) lr 1.9921e-03 eta 22:16:40
+[调度器验证] batch 120: 学习率=0.000272
+epoch [1/25] batch [120/200] time 32.770 (18.726) data 32.533 (18.485) loss 0.0054 (0.9589) acc 100.0000 (75.0000) lr 2.7190e-04 eta 1 day, 1:23:02
+[调度器验证] batch 140: 学习率=0.001188
+epoch [1/25] batch [140/200] time 37.529 (21.089) data 37.288 (20.849) loss 1.5704 (0.9734) acc 50.0000 (74.1071) lr 1.1878e-03 eta 1 day, 4:28:14
+[调度器验证] batch 160: 学习率=0.001426
+epoch [1/25] batch [160/200] time 42.273 (23.456) data 42.035 (23.216) loss 0.6959 (0.9299) acc 75.0000 (74.6875) lr 1.4261e-03 eta 1 day, 7:32:05
+[调度器验证] batch 180: 学习率=0.000125
+epoch [1/25] batch [180/200] time 47.041 (25.823) data 46.801 (25.583) loss 0.6628 (0.9338) acc 50.0000 (74.4444) lr 1.2463e-04 eta 1 day, 10:34:27
+[调度器验证] batch 200: 学习率=0.002000
+epoch [1/25] batch [200/200] time 51.812 (28.196) data 51.577 (27.957) loss 1.7775 (0.8996) acc 75.0000 (75.8750) lr 2.0000e-03 eta 1 day, 13:35:41
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 200}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-1
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000192
+epoch [2/25] batch [20/200] time 4.719 (2.480) data 4.484 (2.245) loss 1.0079 (0.5777) acc 75.0000 (80.0000) lr 1.9189e-04 eta 3:17:35
+[调度器验证] batch 40: 学习率=0.001309
+epoch [2/25] batch [40/200] time 9.421 (4.832) data 9.186 (4.597) loss 0.0575 (0.4888) acc 100.0000 (83.7500) lr 1.3094e-03 eta 6:23:21
+[调度器验证] batch 60: 学习率=0.001309
+epoch [2/25] batch [60/200] time 14.157 (7.191) data 13.925 (6.955) loss 0.9496 (0.4839) acc 75.0000 (84.1667) lr 1.3094e-03 eta 9:28:05
+[调度器验证] batch 80: 学习率=0.000192
+epoch [2/25] batch [80/200] time 18.889 (9.555) data 18.656 (9.319) loss 0.2637 (0.4585) acc 100.0000 (85.6250) lr 1.9189e-04 eta 12:31:37
+[调度器验证] batch 100: 学习率=0.002000
+epoch [2/25] batch [100/200] time 23.619 (11.917) data 23.382 (11.681) loss 0.1232 (0.5224) acc 100.0000 (83.7500) lr 2.0000e-03 eta 15:33:29
+[调度器验证] batch 120: 学习率=0.000192
+epoch [2/25] batch [120/200] time 28.373 (14.283) data 28.135 (14.046) loss 0.0706 (0.5218) acc 100.0000 (84.1667) lr 1.9189e-04 eta 18:34:02
+[调度器验证] batch 140: 学习率=0.001309
+epoch [2/25] batch [140/200] time 33.094 (16.649) data 32.858 (16.413) loss 0.0965 (0.5390) acc 100.0000 (83.7500) lr 1.3094e-03 eta 21:33:06
+[调度器验证] batch 160: 学习率=0.001309
+epoch [2/25] batch [160/200] time 37.823 (19.015) data 37.587 (18.779) loss 0.0111 (0.5301) acc 100.0000 (83.9062) lr 1.3094e-03 eta 1 day, 0:30:30
+[调度器验证] batch 180: 学习率=0.000192
+epoch [2/25] batch [180/200] time 42.573 (21.382) data 42.335 (21.146) loss 0.0010 (0.5304) acc 100.0000 (84.0278) lr 1.9189e-04 eta 1 day, 3:26:23
+[调度器验证] batch 200: 学习率=0.001992
+epoch [2/25] batch [200/200] time 47.323 (23.751) data 47.088 (23.515) loss 1.4862 (0.5508) acc 75.0000 (83.3750) lr 1.9921e-03 eta 1 day, 6:20:54
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 401}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-2
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000125
+epoch [3/25] batch [20/200] time 4.759 (2.501) data 4.522 (2.264) loss 0.0166 (0.5890) acc 100.0000 (86.2500) lr 1.2463e-04 eta 3:10:54
+[调度器验证] batch 40: 学习率=0.001426
+epoch [3/25] batch [40/200] time 9.521 (4.880) data 9.282 (4.643) loss 0.0464 (0.4593) acc 100.0000 (88.7500) lr 1.4261e-03 eta 6:10:54
+[调度器验证] batch 60: 学习率=0.001188
+epoch [3/25] batch [60/200] time 14.249 (7.255) data 14.015 (7.018) loss 0.1880 (0.5224) acc 100.0000 (87.5000) lr 1.1878e-03 eta 9:08:58
+[调度器验证] batch 80: 学习率=0.000272
+epoch [3/25] batch [80/200] time 19.026 (9.631) data 18.783 (9.393) loss 0.0247 (0.5790) acc 100.0000 (85.3125) lr 2.7190e-04 eta 12:05:30
+[调度器验证] batch 100: 学习率=0.001992
+epoch [3/25] batch [100/200] time 23.823 (12.015) data 23.582 (11.777) loss 1.0917 (0.5462) acc 75.0000 (86.0000) lr 1.9921e-03 eta 15:01:07
+[调度器验证] batch 120: 学习率=0.000125
+epoch [3/25] batch [120/200] time 28.568 (14.399) data 28.333 (14.161) loss 0.0411 (0.5406) acc 100.0000 (85.8333) lr 1.2463e-04 eta 17:55:05
+[调度器验证] batch 140: 学习率=0.001426
+epoch [3/25] batch [140/200] time 33.318 (16.779) data 33.081 (16.542) loss 0.0363 (0.5375) acc 100.0000 (85.8929) lr 1.4261e-03 eta 20:47:15
+[调度器验证] batch 160: 学习率=0.001188
+epoch [3/25] batch [160/200] time 38.073 (19.159) data 37.835 (18.922) loss 0.0069 (0.5126) acc 100.0000 (86.0938) lr 1.1878e-03 eta 23:37:46
+[调度器验证] batch 180: 学习率=0.000272
+epoch [3/25] batch [180/200] time 42.779 (21.535) data 42.546 (21.298) loss 0.0485 (0.4879) acc 100.0000 (86.5278) lr 2.7190e-04 eta 1 day, 2:26:26
+[调度器验证] batch 200: 学习率=0.001969
+epoch [3/25] batch [200/200] time 47.517 (23.909) data 47.279 (23.671) loss 0.1946 (0.4711) acc 100.0000 (86.8750) lr 1.9686e-03 eta 1 day, 5:13:17
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 602}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-3
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000071
+epoch [4/25] batch [20/200] time 4.759 (2.500) data 4.524 (2.263) loss 0.2770 (0.5427) acc 75.0000 (82.5000) lr 7.1188e-05 eta 3:02:30
+[调度器验证] batch 40: 学习率=0.001536
+epoch [4/25] batch [40/200] time 9.538 (4.884) data 9.301 (4.646) loss 0.0600 (0.4346) acc 100.0000 (88.1250) lr 1.5361e-03 eta 5:54:52
+[调度器验证] batch 60: 学习率=0.001063
+epoch [4/25] batch [60/200] time 14.305 (7.269) data 14.071 (7.031) loss 0.4687 (0.3915) acc 75.0000 (88.7500) lr 1.0633e-03 eta 8:45:48
+[调度器验证] batch 80: 学习率=0.000363
+epoch [4/25] batch [80/200] time 19.068 (9.653) data 18.832 (9.416) loss 0.2430 (0.4061) acc 100.0000 (88.7500) lr 3.6339e-04 eta 11:35:03
+[调度器验证] batch 100: 学习率=0.001969
+epoch [4/25] batch [100/200] time 23.850 (12.037) data 23.615 (11.799) loss 0.0838 (0.4011) acc 100.0000 (88.7500) lr 1.9686e-03 eta 14:22:41
+[调度器验证] batch 120: 学习率=0.000071
+epoch [4/25] batch [120/200] time 28.617 (14.423) data 28.380 (14.185) loss 0.6480 (0.3785) acc 75.0000 (89.5833) lr 7.1188e-05 eta 17:08:51
+[调度器验证] batch 140: 学习率=0.001536
+epoch [4/25] batch [140/200] time 33.413 (16.810) data 33.171 (16.571) loss 1.4077 (0.3827) acc 50.0000 (89.4643) lr 1.5361e-03 eta 19:53:29
+[调度器验证] batch 160: 学习率=0.001063
+epoch [4/25] batch [160/200] time 38.207 (19.199) data 37.970 (18.961) loss 0.0068 (0.3674) acc 100.0000 (89.8438) lr 1.0633e-03 eta 22:36:44
+[调度器验证] batch 180: 学习率=0.000363
+epoch [4/25] batch [180/200] time 42.981 (21.590) data 42.745 (21.352) loss 0.7936 (0.3746) acc 75.0000 (90.0000) lr 3.6339e-04 eta 1 day, 1:18:29
+[调度器验证] batch 200: 学习率=0.001930
+epoch [4/25] batch [200/200] time 47.744 (23.979) data 47.506 (23.741) loss 0.0807 (0.3815) acc 100.0000 (90.0000) lr 1.9298e-03 eta 1 day, 3:58:31
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 803}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-4
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000032
+epoch [5/25] batch [20/200] time 4.764 (2.502) data 4.525 (2.264) loss 0.1771 (0.4922) acc 100.0000 (88.7500) lr 3.2401e-05 eta 2:54:18
+[调度器验证] batch 40: 学习率=0.001638
+epoch [5/25] batch [40/200] time 9.514 (4.878) data 9.275 (4.641) loss 0.0711 (0.4245) acc 100.0000 (90.0000) lr 1.6376e-03 eta 5:38:12
+[调度器验证] batch 60: 学习率=0.000938
+epoch [5/25] batch [60/200] time 14.271 (7.256) data 14.032 (7.019) loss 0.0601 (0.4680) acc 100.0000 (87.5000) lr 9.3774e-04 eta 8:20:41
+[调度器验证] batch 80: 学习率=0.000465
+epoch [5/25] batch [80/200] time 19.050 (9.639) data 18.815 (9.401) loss 0.1345 (0.4482) acc 100.0000 (87.8125) lr 4.6494e-04 eta 11:01:51
+[调度器验证] batch 100: 学习率=0.001930
+epoch [5/25] batch [100/200] time 23.821 (12.022) data 23.587 (11.784) loss 1.2824 (0.4542) acc 75.0000 (88.2500) lr 1.9298e-03 eta 13:41:30
+[调度器验证] batch 120: 学习率=0.000032
+epoch [5/25] batch [120/200] time 28.621 (14.409) data 28.384 (14.171) loss 0.3041 (0.4260) acc 75.0000 (88.3333) lr 3.2401e-05 eta 16:19:47
+[调度器验证] batch 140: 学习率=0.001638
+epoch [5/25] batch [140/200] time 33.341 (16.793) data 33.107 (16.556) loss 0.0001 (0.3940) acc 100.0000 (88.9286) lr 1.6376e-03 eta 18:56:21
+[调度器验证] batch 160: 学习率=0.000938
+epoch [5/25] batch [160/200] time 38.063 (19.172) data 37.829 (18.935) loss 0.0673 (0.3708) acc 100.0000 (89.5312) lr 9.3774e-04 eta 21:30:55
+[调度器验证] batch 180: 学习率=0.000465
+epoch [5/25] batch [180/200] time 42.815 (21.548) data 42.575 (21.311) loss 0.0003 (0.3524) acc 100.0000 (90.2778) lr 4.6494e-04 eta 1 day, 0:03:44
+[调度器验证] batch 200: 学习率=0.001876
+epoch [5/25] batch [200/200] time 47.575 (23.925) data 47.327 (23.687) loss 0.1612 (0.3627) acc 100.0000 (89.6250) lr 1.8764e-03 eta 1 day, 2:34:59
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 1004}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-5
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000009
+epoch [6/25] batch [20/200] time 4.776 (2.516) data 4.539 (2.277) loss 0.8764 (0.4917) acc 75.0000 (87.5000) lr 8.8814e-06 eta 2:46:52
+[调度器验证] batch 40: 学习率=0.001729
+epoch [6/25] batch [40/200] time 9.568 (4.902) data 9.330 (4.663) loss 0.4240 (0.3669) acc 75.0000 (87.5000) lr 1.7291e-03 eta 5:23:30
+[调度器验证] batch 60: 学习率=0.000813
+epoch [6/25] batch [60/200] time 14.328 (7.290) data 14.089 (7.051) loss 0.0798 (0.3876) acc 100.0000 (86.6667) lr 8.1321e-04 eta 7:58:41
+[调度器验证] batch 80: 学习率=0.000575
+epoch [6/25] batch [80/200] time 19.118 (9.678) data 18.880 (9.440) loss 0.0156 (0.3414) acc 100.0000 (88.7500) lr 5.7493e-04 eta 10:32:18
+[调度器验证] batch 100: 学习率=0.001876
+epoch [6/25] batch [100/200] time 23.902 (12.069) data 23.666 (11.831) loss 0.0026 (0.3421) acc 100.0000 (89.0000) lr 1.8764e-03 eta 13:04:30
+[调度器验证] batch 120: 学习率=0.000009
+epoch [6/25] batch [120/200] time 28.668 (14.458) data 28.430 (14.220) loss 0.0077 (0.3264) acc 100.0000 (89.5833) lr 8.8814e-06 eta 15:34:58
+[调度器验证] batch 140: 学习率=0.001729
+epoch [6/25] batch [140/200] time 33.415 (16.845) data 33.176 (16.606) loss 0.5826 (0.3335) acc 75.0000 (89.6429) lr 1.7291e-03 eta 18:03:39
+[调度器验证] batch 160: 学习率=0.000813
+epoch [6/25] batch [160/200] time 38.156 (19.227) data 37.923 (18.989) loss 1.5804 (0.3537) acc 50.0000 (89.5312) lr 8.1321e-04 eta 20:30:32
+[调度器验证] batch 180: 学习率=0.000575
+epoch [6/25] batch [180/200] time 43.036 (21.617) data 42.798 (21.378) loss 0.0215 (0.3407) acc 100.0000 (90.0000) lr 5.7493e-04 eta 22:56:15
+[调度器验证] batch 200: 学习率=0.001809
+epoch [6/25] batch [200/200] time 47.795 (24.007) data 47.558 (23.769) loss 0.8758 (0.3458) acc 75.0000 (90.1250) lr 1.8091e-03 eta 1 day, 1:20:27
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 1205}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-6
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000001
+epoch [7/25] batch [20/200] time 4.727 (2.480) data 4.489 (2.244) loss 0.0869 (0.4470) acc 100.0000 (86.2500) lr 1.0000e-06 eta 2:36:13
+[调度器验证] batch 40: 学习率=0.001809
+epoch [7/25] batch [40/200] time 9.495 (4.860) data 9.261 (4.623) loss 0.0054 (0.4073) acc 100.0000 (88.1250) lr 1.8091e-03 eta 5:04:33
+[调度器验证] batch 60: 学习率=0.000692
+epoch [7/25] batch [60/200] time 14.237 (7.234) data 14.001 (6.997) loss 1.0596 (0.3365) acc 75.0000 (90.4167) lr 6.9164e-04 eta 7:30:56
+[调度器验证] batch 80: 学习率=0.000692
+epoch [7/25] batch [80/200] time 18.946 (9.604) data 18.710 (9.368) loss 1.0093 (0.3371) acc 75.0000 (90.3125) lr 6.9164e-04 eta 9:55:27
+[调度器验证] batch 100: 学习率=0.001809
+epoch [7/25] batch [100/200] time 23.628 (11.964) data 23.390 (11.728) loss 0.4655 (0.3481) acc 75.0000 (90.5000) lr 1.8091e-03 eta 12:17:46
+[调度器验证] batch 120: 学习率=0.000001
+epoch [7/25] batch [120/200] time 28.319 (14.319) data 28.087 (14.083) loss 0.4970 (0.3365) acc 75.0000 (91.2500) lr 1.0000e-06 eta 14:38:12
+[调度器验证] batch 140: 学习率=0.001809
+epoch [7/25] batch [140/200] time 33.030 (16.671) data 32.795 (16.436) loss 0.0188 (0.3565) acc 100.0000 (90.5357) lr 1.8091e-03 eta 16:56:57
+[调度器验证] batch 160: 学习率=0.000692
+epoch [7/25] batch [160/200] time 37.773 (19.029) data 37.540 (18.794) loss 1.8198 (0.3551) acc 50.0000 (90.3125) lr 6.9164e-04 eta 19:14:26
+[调度器验证] batch 180: 学习率=0.000692
+epoch [7/25] batch [180/200] time 42.525 (21.389) data 42.284 (21.154) loss 0.7527 (0.3557) acc 75.0000 (89.8611) lr 6.9164e-04 eta 21:30:29
+[调度器验证] batch 200: 学习率=0.001729
+epoch [7/25] batch [200/200] time 47.251 (23.751) data 47.008 (23.515) loss 0.0225 (0.3571) acc 100.0000 (89.7500) lr 1.7291e-03 eta 23:45:03
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 1406}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-7
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000009
+epoch [8/25] batch [20/200] time 4.724 (2.481) data 4.488 (2.245) loss 0.0029 (0.4560) acc 100.0000 (86.2500) lr 8.8814e-06 eta 2:28:00
+[调度器验证] batch 40: 学习率=0.001876
+epoch [8/25] batch [40/200] time 9.451 (4.841) data 9.213 (4.605) loss 0.3737 (0.4826) acc 100.0000 (87.5000) lr 1.8764e-03 eta 4:47:13
+[调度器验证] batch 60: 学习率=0.000575
+epoch [8/25] batch [60/200] time 14.176 (7.205) data 13.942 (6.969) loss 0.2812 (0.4381) acc 100.0000 (86.6667) lr 5.7493e-04 eta 7:05:06
+[调度器验证] batch 80: 学习率=0.000813
+epoch [8/25] batch [80/200] time 18.907 (9.567) data 18.668 (9.332) loss 0.0490 (0.3985) acc 100.0000 (87.8125) lr 8.1321e-04 eta 9:21:17
+[调度器验证] batch 100: 学习率=0.001729
+epoch [8/25] batch [100/200] time 23.644 (11.932) data 23.410 (11.696) loss 0.0185 (0.3575) acc 100.0000 (89.0000) lr 1.7291e-03 eta 11:36:01
+[调度器验证] batch 120: 学习率=0.000009
+epoch [8/25] batch [120/200] time 28.373 (14.296) data 28.134 (14.060) loss 0.9669 (0.3456) acc 75.0000 (89.3750) lr 8.8814e-06 eta 13:49:10
+[调度器验证] batch 140: 学习率=0.001876
+epoch [8/25] batch [140/200] time 33.155 (16.668) data 32.922 (16.432) loss 0.5731 (0.3372) acc 75.0000 (89.4643) lr 1.8764e-03 eta 16:01:11
+[调度器验证] batch 160: 学习率=0.000575
+epoch [8/25] batch [160/200] time 37.903 (19.040) data 37.669 (18.804) loss 0.0136 (0.3181) acc 100.0000 (90.3125) lr 5.7493e-04 eta 18:11:38
+[调度器验证] batch 180: 学习率=0.000813
+epoch [8/25] batch [180/200] time 42.650 (21.413) data 42.415 (21.177) loss 1.0218 (0.3236) acc 75.0000 (90.2778) lr 8.1321e-04 eta 20:20:32
+[调度器验证] batch 200: 学习率=0.001638
+epoch [8/25] batch [200/200] time 47.408 (23.786) data 47.172 (23.550) loss 0.6790 (0.3315) acc 75.0000 (89.8750) lr 1.6376e-03 eta 22:27:53
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 1607}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-8
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000032
+epoch [9/25] batch [20/200] time 4.745 (2.490) data 4.509 (2.254) loss 0.0201 (0.2490) acc 100.0000 (92.5000) lr 3.2401e-05 eta 2:20:17
+[调度器验证] batch 40: 学习率=0.001930
+epoch [9/25] batch [40/200] time 9.482 (4.863) data 9.246 (4.626) loss 0.4235 (0.2888) acc 75.0000 (90.0000) lr 1.9298e-03 eta 4:32:20
+[调度器验证] batch 60: 学习率=0.000465
+epoch [9/25] batch [60/200] time 14.191 (7.226) data 13.955 (6.989) loss 0.0154 (0.3208) acc 100.0000 (89.1667) lr 4.6494e-04 eta 6:42:13
+[调度器验证] batch 80: 学习率=0.000938
+epoch [9/25] batch [80/200] time 18.771 (9.569) data 18.542 (9.335) loss 0.0070 (0.3553) acc 100.0000 (89.0625) lr 9.3774e-04 eta 8:49:29
+[调度器验证] batch 100: 学习率=0.001638
+epoch [9/25] batch [100/200] time 23.445 (11.899) data 23.213 (11.665) loss 0.1650 (0.3299) acc 100.0000 (90.5000) lr 1.6376e-03 eta 10:54:26
+[调度器验证] batch 120: 学习率=0.000032
+epoch [9/25] batch [120/200] time 28.130 (14.233) data 27.895 (13.999) loss 0.0014 (0.3495) acc 100.0000 (90.0000) lr 3.2401e-05 eta 12:58:02
+[调度器验证] batch 140: 学习率=0.001930
+epoch [9/25] batch [140/200] time 32.853 (16.572) data 32.614 (16.338) loss 0.3041 (0.3280) acc 100.0000 (90.7143) lr 1.9298e-03 eta 15:00:25
+[调度器验证] batch 160: 学习率=0.000465
+epoch [9/25] batch [160/200] time 37.593 (18.918) data 37.355 (18.684) loss 0.1065 (0.3139) acc 100.0000 (91.0938) lr 4.6494e-04 eta 17:01:35
+[调度器验证] batch 180: 学习率=0.000938
+epoch [9/25] batch [180/200] time 42.333 (21.270) data 42.099 (21.035) loss 0.0034 (0.3077) acc 100.0000 (91.1111) lr 9.3774e-04 eta 19:01:28
+[调度器验证] batch 200: 学习率=0.001536
+epoch [9/25] batch [200/200] time 47.111 (23.628) data 46.872 (23.393) loss 0.0034 (0.2995) acc 100.0000 (91.5000) lr 1.5361e-03 eta 21:00:09
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 1808}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-9
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000071
+epoch [10/25] batch [20/200] time 4.749 (2.486) data 4.509 (2.249) loss 0.0111 (0.2328) acc 100.0000 (92.5000) lr 7.1188e-05 eta 2:11:46
+[调度器验证] batch 40: 学习率=0.001969
+epoch [10/25] batch [40/200] time 9.490 (4.864) data 9.252 (4.627) loss 0.2932 (0.2189) acc 100.0000 (93.7500) lr 1.9686e-03 eta 4:16:10
+[调度器验证] batch 60: 学习率=0.000363
+epoch [10/25] batch [60/200] time 14.237 (7.236) data 13.992 (6.999) loss 0.7199 (0.2354) acc 75.0000 (92.9167) lr 3.6339e-04 eta 6:18:41
+[调度器验证] batch 80: 学习率=0.001063
+epoch [10/25] batch [80/200] time 18.978 (9.609) data 18.740 (9.372) loss 0.6601 (0.2464) acc 75.0000 (92.8125) lr 1.0633e-03 eta 8:19:39
+[调度器验证] batch 100: 学习率=0.001536
+epoch [10/25] batch [100/200] time 23.746 (11.984) data 23.509 (11.747) loss 0.1853 (0.2438) acc 100.0000 (93.5000) lr 1.5361e-03 eta 10:19:09
+[调度器验证] batch 120: 学习率=0.000071
+epoch [10/25] batch [120/200] time 28.516 (14.361) data 28.271 (14.124) loss 0.0032 (0.2712) acc 100.0000 (92.9167) lr 7.1188e-05 eta 12:17:12
+[调度器验证] batch 140: 学习率=0.001969
+epoch [10/25] batch [140/200] time 33.295 (16.741) data 33.054 (16.504) loss 0.2077 (0.2619) acc 100.0000 (93.3929) lr 1.9686e-03 eta 14:13:47
+[调度器验证] batch 160: 学习率=0.000363
+epoch [10/25] batch [160/200] time 38.101 (19.127) data 37.863 (18.889) loss 0.0331 (0.2544) acc 100.0000 (93.4375) lr 3.6339e-04 eta 16:09:04
+[调度器验证] batch 180: 学习率=0.001063
+epoch [10/25] batch [180/200] time 42.911 (21.515) data 42.669 (21.277) loss 1.6803 (0.2538) acc 75.0000 (93.4722) lr 1.0633e-03 eta 18:02:56
+[调度器验证] batch 200: 学习率=0.001426
+epoch [10/25] batch [200/200] time 47.699 (23.906) data 47.461 (23.668) loss 0.0544 (0.2687) acc 100.0000 (93.0000) lr 1.4261e-03 eta 19:55:18
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 2009}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-10
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000125
+epoch [11/25] batch [20/200] time 4.732 (2.493) data 4.499 (2.257) loss 0.2616 (0.2981) acc 100.0000 (91.2500) lr 1.2463e-04 eta 2:03:49
+[调度器验证] batch 40: 学习率=0.001992
+epoch [11/25] batch [40/200] time 9.464 (4.854) data 9.231 (4.618) loss 0.3559 (0.2523) acc 100.0000 (93.1250) lr 1.9921e-03 eta 3:59:29
+[调度器验证] batch 60: 学习率=0.000272
+epoch [11/25] batch [60/200] time 14.181 (7.216) data 13.941 (6.980) loss 0.1770 (0.2130) acc 100.0000 (94.5833) lr 2.7190e-04 eta 5:53:34
+[调度器验证] batch 80: 学习率=0.001188
+epoch [11/25] batch [80/200] time 18.943 (9.582) data 18.706 (9.346) loss 0.1831 (0.2385) acc 100.0000 (94.0625) lr 1.1878e-03 eta 7:46:19
+[调度器验证] batch 100: 学习率=0.001426
+epoch [11/25] batch [100/200] time 23.690 (11.953) data 23.455 (11.716) loss 0.8775 (0.2536) acc 75.0000 (93.2500) lr 1.4261e-03 eta 9:37:43
+[调度器验证] batch 120: 学习率=0.000125
+epoch [11/25] batch [120/200] time 28.433 (14.325) data 28.195 (14.089) loss 0.0026 (0.2477) acc 100.0000 (93.3333) lr 1.2463e-04 eta 11:27:36
+[调度器验证] batch 140: 学习率=0.001992
+epoch [11/25] batch [140/200] time 33.201 (16.699) data 32.965 (16.462) loss 0.0056 (0.2619) acc 100.0000 (92.6786) lr 1.9921e-03 eta 13:15:58
+[调度器验证] batch 160: 学习率=0.000272
+epoch [11/25] batch [160/200] time 37.966 (19.074) data 37.727 (18.838) loss 0.0063 (0.2526) acc 100.0000 (92.8125) lr 2.7190e-04 eta 15:02:51
+[调度器验证] batch 180: 学习率=0.001188
+epoch [11/25] batch [180/200] time 42.723 (21.452) data 42.487 (21.215) loss 1.5574 (0.2557) acc 75.0000 (92.5000) lr 1.1878e-03 eta 16:48:13
+[调度器验证] batch 200: 学习率=0.001309
+epoch [11/25] batch [200/200] time 47.466 (23.828) data 47.221 (23.591) loss 0.2399 (0.2389) acc 75.0000 (92.8750) lr 1.3094e-03 eta 18:31:57
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 2210}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-11
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000192
+epoch [12/25] batch [20/200] time 4.757 (2.492) data 4.519 (2.255) loss 0.0134 (0.1080) acc 100.0000 (96.2500) lr 1.9189e-04 eta 1:55:28
+[调度器验证] batch 40: 学习率=0.002000
+epoch [12/25] batch [40/200] time 9.524 (4.875) data 9.286 (4.637) loss 0.0019 (0.1761) acc 100.0000 (95.0000) lr 2.0000e-03 eta 3:44:14
+[调度器验证] batch 60: 学习率=0.000192
+epoch [12/25] batch [60/200] time 14.296 (7.259) data 14.058 (7.022) loss 0.0012 (0.2095) acc 100.0000 (94.1667) lr 1.9189e-04 eta 5:31:30
+[调度器验证] batch 80: 学习率=0.001309
+epoch [12/25] batch [80/200] time 19.092 (9.649) data 18.853 (9.411) loss 1.1214 (0.2400) acc 75.0000 (93.4375) lr 1.3094e-03 eta 7:17:25
+[调度器验证] batch 100: 学习率=0.001309
+epoch [12/25] batch [100/200] time 23.874 (12.040) data 23.636 (11.801) loss 0.0078 (0.2452) acc 100.0000 (93.2500) lr 1.3094e-03 eta 9:01:47
+[调度器验证] batch 120: 学习率=0.000192
+epoch [12/25] batch [120/200] time 28.652 (14.432) data 28.416 (14.193) loss 0.8981 (0.2491) acc 75.0000 (93.1250) lr 1.9189e-04 eta 10:44:37
+[调度器验证] batch 140: 学习率=0.002000
+epoch [12/25] batch [140/200] time 33.417 (16.821) data 33.184 (16.583) loss 0.0228 (0.2617) acc 100.0000 (93.0357) lr 2.0000e-03 eta 12:25:44
+[调度器验证] batch 160: 学习率=0.000192
+epoch [12/25] batch [160/200] time 38.192 (19.208) data 37.952 (18.970) loss 0.0415 (0.2474) acc 100.0000 (93.2812) lr 1.9189e-04 eta 14:05:09
+[调度器验证] batch 180: 学习率=0.001309
+epoch [12/25] batch [180/200] time 43.049 (21.602) data 42.815 (21.363) loss 1.0157 (0.2455) acc 75.0000 (93.1944) lr 1.3094e-03 eta 15:43:17
+[调度器验证] batch 200: 学习率=0.001188
+epoch [12/25] batch [200/200] time 47.744 (23.993) data 47.511 (23.755) loss 0.0059 (0.2526) acc 100.0000 (93.0000) lr 1.1878e-03 eta 17:19:42
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 2411}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-12
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000272
+epoch [13/25] batch [20/200] time 4.707 (2.473) data 4.470 (2.238) loss 0.0203 (0.1247) acc 100.0000 (98.7500) lr 2.7190e-04 eta 1:46:19
+[调度器验证] batch 40: 学习率=0.001992
+epoch [13/25] batch [40/200] time 9.444 (4.832) data 9.207 (4.597) loss 0.5560 (0.1963) acc 75.0000 (95.0000) lr 1.9921e-03 eta 3:26:11
+[调度器验证] batch 60: 学习率=0.000125
+epoch [13/25] batch [60/200] time 14.195 (7.204) data 13.959 (6.968) loss 0.0051 (0.2168) acc 100.0000 (94.1667) lr 1.2463e-04 eta 5:04:57
+[调度器验证] batch 80: 学习率=0.001426
+epoch [13/25] batch [80/200] time 18.930 (9.573) data 18.694 (9.337) loss 0.0018 (0.2828) acc 100.0000 (91.8750) lr 1.4261e-03 eta 6:42:04
+[调度器验证] batch 100: 学习率=0.001188
+epoch [13/25] batch [100/200] time 23.681 (11.943) data 23.445 (11.706) loss 0.0007 (0.2723) acc 100.0000 (92.0000) lr 1.1878e-03 eta 8:17:36
+[调度器验证] batch 120: 学习率=0.000272
+epoch [13/25] batch [120/200] time 28.428 (14.314) data 28.192 (14.078) loss 0.0096 (0.2596) acc 100.0000 (92.0833) lr 2.7190e-04 eta 9:51:39
+[调度器验证] batch 140: 学习率=0.001992
+epoch [13/25] batch [140/200] time 33.126 (16.684) data 32.890 (16.447) loss 0.0035 (0.2458) acc 100.0000 (92.5000) lr 1.9921e-03 eta 11:24:01
+[调度器验证] batch 160: 学习率=0.000125
+epoch [13/25] batch [160/200] time 37.876 (19.050) data 37.636 (18.814) loss 0.0005 (0.2483) acc 100.0000 (92.5000) lr 1.2463e-04 eta 12:54:42
+[调度器验证] batch 180: 学习率=0.001426
+epoch [13/25] batch [180/200] time 42.614 (21.418) data 42.375 (21.182) loss 0.0047 (0.2482) acc 100.0000 (92.6389) lr 1.4261e-03 eta 14:23:52
+[调度器验证] batch 200: 学习率=0.001063
+epoch [13/25] batch [200/200] time 47.345 (23.786) data 47.110 (23.550) loss 0.1571 (0.2438) acc 100.0000 (93.0000) lr 1.0633e-03 eta 15:51:26
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 2612}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-13
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000363
+epoch [14/25] batch [20/200] time 4.724 (2.483) data 4.491 (2.247) loss 0.2765 (0.1969) acc 75.0000 (95.0000) lr 3.6339e-04 eta 1:38:28
+[调度器验证] batch 40: 学习率=0.001969
+epoch [14/25] batch [40/200] time 9.334 (4.812) data 9.100 (4.579) loss 0.0002 (0.2341) acc 100.0000 (93.7500) lr 1.9686e-03 eta 3:09:16
+[调度器验证] batch 60: 学习率=0.000071
+epoch [14/25] batch [60/200] time 14.048 (7.142) data 13.804 (6.908) loss 0.0053 (0.2672) acc 100.0000 (92.5000) lr 7.1188e-05 eta 4:38:32
+[调度器验证] batch 80: 学习率=0.001536
+epoch [14/25] batch [80/200] time 18.767 (9.489) data 18.534 (9.255) loss 0.0259 (0.2814) acc 100.0000 (92.5000) lr 1.5361e-03 eta 6:06:53
+[调度器验证] batch 100: 学习率=0.001063
+epoch [14/25] batch [100/200] time 23.512 (11.841) data 23.262 (11.607) loss 0.3964 (0.3012) acc 100.0000 (91.7500) lr 1.0633e-03 eta 7:33:55
+[调度器验证] batch 120: 学习率=0.000363
+epoch [14/25] batch [120/200] time 28.257 (14.201) data 28.017 (13.966) loss 0.0008 (0.2938) acc 100.0000 (91.8750) lr 3.6339e-04 eta 8:59:37
+[调度器验证] batch 140: 学习率=0.001969
+epoch [14/25] batch [140/200] time 33.001 (16.565) data 32.767 (16.330) loss 0.0334 (0.3077) acc 100.0000 (91.7857) lr 1.9686e-03 eta 10:23:57
+[调度器验证] batch 160: 学习率=0.000071
+epoch [14/25] batch [160/200] time 37.681 (18.926) data 37.443 (18.691) loss 0.0006 (0.2813) acc 100.0000 (92.6562) lr 7.1188e-05 eta 11:46:34
+[调度器验证] batch 180: 学习率=0.001536
+epoch [14/25] batch [180/200] time 42.418 (21.286) data 42.182 (21.051) loss 0.1608 (0.2816) acc 100.0000 (92.7778) lr 1.5361e-03 eta 13:07:35
+[调度器验证] batch 200: 学习率=0.000938
+epoch [14/25] batch [200/200] time 47.156 (23.647) data 46.916 (23.412) loss 0.2313 (0.2744) acc 100.0000 (92.7500) lr 9.3774e-04 eta 14:27:03
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 2813}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-14
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000465
+epoch [15/25] batch [20/200] time 4.743 (2.491) data 4.508 (2.254) loss 0.0473 (0.1942) acc 100.0000 (95.0000) lr 4.6494e-04 eta 1:30:30
+[调度器验证] batch 40: 学习率=0.001930
+epoch [15/25] batch [40/200] time 9.486 (4.859) data 9.249 (4.622) loss 0.0156 (0.1903) acc 100.0000 (95.0000) lr 1.9298e-03 eta 2:54:55
+[调度器验证] batch 60: 学习率=0.000032
+epoch [15/25] batch [60/200] time 14.218 (7.230) data 13.982 (6.994) loss 0.1895 (0.2067) acc 100.0000 (94.5833) lr 3.2401e-05 eta 4:17:52
+[调度器验证] batch 80: 学习率=0.001638
+epoch [15/25] batch [80/200] time 18.970 (9.600) data 18.732 (9.363) loss 0.0337 (0.1957) acc 100.0000 (95.0000) lr 1.6376e-03 eta 5:39:12
+[调度器验证] batch 100: 学习率=0.000938
+epoch [15/25] batch [100/200] time 23.700 (11.973) data 23.468 (11.736) loss 0.0366 (0.2321) acc 100.0000 (94.5000) lr 9.3774e-04 eta 6:59:03
+[调度器验证] batch 120: 学习率=0.000465
+epoch [15/25] batch [120/200] time 28.393 (14.338) data 28.161 (14.101) loss 0.0074 (0.2143) acc 100.0000 (94.7917) lr 4.6494e-04 eta 8:17:02
+[调度器验证] batch 140: 学习率=0.001930
+epoch [15/25] batch [140/200] time 33.114 (16.700) data 32.878 (16.464) loss 0.0024 (0.2512) acc 100.0000 (93.9286) lr 1.9298e-03 eta 9:33:22
+[调度器验证] batch 160: 学习率=0.000032
+epoch [15/25] batch [160/200] time 37.844 (19.062) data 37.607 (18.826) loss 0.0091 (0.2520) acc 100.0000 (93.9062) lr 3.2401e-05 eta 10:48:07
+[调度器验证] batch 180: 学习率=0.001638
+epoch [15/25] batch [180/200] time 42.574 (21.425) data 42.342 (21.189) loss 0.0230 (0.2516) acc 100.0000 (93.7500) lr 1.6376e-03 eta 12:01:19
+[调度器验证] batch 200: 学习率=0.000813
+epoch [15/25] batch [200/200] time 47.296 (23.789) data 47.059 (23.553) loss 0.4681 (0.2478) acc 75.0000 (93.6250) lr 8.1321e-04 eta 13:12:57
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 3014}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-15
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000575
+epoch [16/25] batch [20/200] time 4.753 (2.488) data 4.514 (2.251) loss 0.2888 (0.3203) acc 100.0000 (93.7500) lr 5.7493e-04 eta 1:22:06
+[调度器验证] batch 40: 学习率=0.001876
+epoch [16/25] batch [40/200] time 9.506 (4.866) data 9.262 (4.628) loss 1.3492 (0.3948) acc 75.0000 (91.8750) lr 1.8764e-03 eta 2:38:56
+[调度器验证] batch 60: 学习率=0.000009
+epoch [16/25] batch [60/200] time 14.258 (7.243) data 14.022 (7.006) loss 0.0363 (0.3530) acc 100.0000 (91.2500) lr 8.8814e-06 eta 3:54:11
+[调度器验证] batch 80: 学习率=0.001729
+epoch [16/25] batch [80/200] time 19.056 (9.626) data 18.811 (9.388) loss 0.6943 (0.3189) acc 75.0000 (91.2500) lr 1.7291e-03 eta 5:08:02
+[调度器验证] batch 100: 学习率=0.000813
+epoch [16/25] batch [100/200] time 23.851 (12.018) data 23.609 (11.780) loss 0.0004 (0.2839) acc 100.0000 (92.2500) lr 8.1321e-04 eta 6:20:33
+[调度器验证] batch 120: 学习率=0.000575
+epoch [16/25] batch [120/200] time 28.540 (14.399) data 28.308 (14.162) loss 0.0028 (0.2833) acc 100.0000 (92.7083) lr 5.7493e-04 eta 7:31:10
+[调度器验证] batch 140: 学习率=0.001876
+epoch [16/25] batch [140/200] time 33.255 (16.772) data 33.014 (16.535) loss 0.0005 (0.2787) acc 100.0000 (92.6786) lr 1.8764e-03 eta 8:39:55
+[调度器验证] batch 160: 学习率=0.000009
+epoch [16/25] batch [160/200] time 37.978 (19.141) data 37.743 (18.904) loss 0.0381 (0.2853) acc 100.0000 (92.3438) lr 8.8814e-06 eta 9:46:59
+[调度器验证] batch 180: 学习率=0.001729
+epoch [16/25] batch [180/200] time 42.778 (21.514) data 42.538 (21.277) loss 0.0171 (0.2674) acc 100.0000 (92.9167) lr 1.7291e-03 eta 10:52:35
+[调度器验证] batch 200: 学习率=0.000692
+epoch [16/25] batch [200/200] time 47.536 (23.890) data 47.297 (23.653) loss 0.0011 (0.2887) acc 100.0000 (92.2500) lr 6.9164e-04 eta 11:56:41
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 3215}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-16
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000692
+epoch [17/25] batch [20/200] time 4.762 (2.503) data 4.526 (2.266) loss 0.0085 (0.2431) acc 100.0000 (92.5000) lr 6.9164e-04 eta 1:14:15
+[调度器验证] batch 40: 学习率=0.001809
+epoch [17/25] batch [40/200] time 9.491 (4.875) data 9.253 (4.638) loss 0.0682 (0.3184) acc 100.0000 (91.2500) lr 1.8091e-03 eta 2:23:00
+[调度器验证] batch 60: 学习率=0.000001
+epoch [17/25] batch [60/200] time 14.241 (7.247) data 14.001 (7.010) loss 1.7275 (0.3385) acc 75.0000 (90.0000) lr 1.0000e-06 eta 3:30:09
+[调度器验证] batch 80: 学习率=0.001809
+epoch [17/25] batch [80/200] time 18.967 (9.615) data 18.732 (9.379) loss 0.4262 (0.3230) acc 75.0000 (90.3125) lr 1.8091e-03 eta 4:35:38
+[调度器验证] batch 100: 学习率=0.000692
+epoch [17/25] batch [100/200] time 23.713 (11.986) data 23.480 (11.749) loss 0.0479 (0.3101) acc 100.0000 (90.7500) lr 6.9164e-04 eta 5:39:35
+[调度器验证] batch 120: 学习率=0.000692
+epoch [17/25] batch [120/200] time 28.516 (14.358) data 28.277 (14.121) loss 0.0256 (0.3065) acc 100.0000 (90.8333) lr 6.9164e-04 eta 6:42:02
+[调度器验证] batch 140: 学习率=0.001809
+epoch [17/25] batch [140/200] time 33.348 (16.744) data 33.110 (16.506) loss 0.0678 (0.2944) acc 100.0000 (91.0714) lr 1.8091e-03 eta 7:43:14
+[调度器验证] batch 160: 学习率=0.000001
+epoch [17/25] batch [160/200] time 38.169 (19.137) data 37.930 (18.899) loss 0.0936 (0.2724) acc 100.0000 (91.7188) lr 1.0000e-06 eta 8:43:04
+[调度器验证] batch 180: 学习率=0.001809
+epoch [17/25] batch [180/200] time 42.964 (21.531) data 42.727 (21.293) loss 0.0034 (0.2783) acc 100.0000 (91.6667) lr 1.8091e-03 eta 9:41:19
+[调度器验证] batch 200: 学习率=0.000575
+epoch [17/25] batch [200/200] time 47.733 (23.925) data 47.485 (23.686) loss 0.2084 (0.2752) acc 75.0000 (91.7500) lr 5.7493e-04 eta 10:37:59
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 3416}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-17
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000813
+epoch [18/25] batch [20/200] time 4.798 (2.523) data 4.559 (2.284) loss 0.0039 (0.3060) acc 100.0000 (90.0000) lr 8.1321e-04 eta 1:06:26
+[调度器验证] batch 40: 学习率=0.001729
+epoch [18/25] batch [40/200] time 9.559 (4.914) data 9.323 (4.675) loss 0.2740 (0.3709) acc 75.0000 (89.3750) lr 1.7291e-03 eta 2:07:45
+[调度器验证] batch 60: 学习率=0.000009
+epoch [18/25] batch [60/200] time 14.163 (7.273) data 13.937 (7.037) loss 0.0007 (0.3221) acc 100.0000 (90.8333) lr 8.8814e-06 eta 3:06:39
+[调度器验证] batch 80: 学习率=0.001876
+epoch [18/25] batch [80/200] time 18.742 (9.596) data 18.515 (9.362) loss 0.0196 (0.3163) acc 100.0000 (91.5625) lr 1.8764e-03 eta 4:03:06
+[调度器验证] batch 100: 学习率=0.000575
+epoch [18/25] batch [100/200] time 23.375 (11.910) data 23.144 (11.676) loss 0.3251 (0.2843) acc 75.0000 (92.2500) lr 5.7493e-04 eta 4:57:44
+[调度器验证] batch 120: 学习率=0.000813
+epoch [18/25] batch [120/200] time 28.022 (14.227) data 27.786 (13.993) loss 0.0063 (0.3036) acc 100.0000 (91.8750) lr 8.1321e-04 eta 5:50:55
+[调度器验证] batch 140: 学习率=0.001729
+epoch [18/25] batch [140/200] time 32.731 (16.550) data 32.493 (16.317) loss 0.0003 (0.3147) acc 100.0000 (91.7857) lr 1.7291e-03 eta 6:42:42
+[调度器验证] batch 160: 学习率=0.000009
+epoch [18/25] batch [160/200] time 37.477 (18.884) data 37.242 (18.650) loss 0.0331 (0.2881) acc 100.0000 (92.5000) lr 8.8814e-06 eta 7:33:12
+[调度器验证] batch 180: 学习率=0.001876
+epoch [18/25] batch [180/200] time 42.294 (21.230) data 42.060 (20.996) loss 0.0259 (0.3004) acc 100.0000 (92.3611) lr 1.8764e-03 eta 8:22:26
+[调度器验证] batch 200: 学习率=0.000465
+epoch [18/25] batch [200/200] time 47.059 (23.586) data 46.823 (23.351) loss 0.1060 (0.2973) acc 100.0000 (92.6250) lr 4.6494e-04 eta 9:10:20
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 3617}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-18
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.000938
+epoch [19/25] batch [20/200] time 4.772 (2.500) data 4.534 (2.262) loss 0.0031 (0.1898) acc 100.0000 (96.2500) lr 9.3774e-04 eta 0:57:30
+[调度器验证] batch 40: 学习率=0.001638
+epoch [19/25] batch [40/200] time 9.494 (4.877) data 9.261 (4.640) loss 0.0081 (0.1318) acc 100.0000 (97.5000) lr 1.6376e-03 eta 1:50:32
+[调度器验证] batch 60: 学习率=0.000032
+epoch [19/25] batch [60/200] time 14.216 (7.243) data 13.979 (7.006) loss 0.0160 (0.1691) acc 100.0000 (95.4167) lr 3.2401e-05 eta 2:41:45
+[调度器验证] batch 80: 学习率=0.001930
+epoch [19/25] batch [80/200] time 18.976 (9.610) data 18.742 (9.373) loss 0.0004 (0.1633) acc 100.0000 (95.6250) lr 1.9298e-03 eta 3:31:25
+[调度器验证] batch 100: 学习率=0.000465
+epoch [19/25] batch [100/200] time 23.699 (11.980) data 23.462 (11.744) loss 0.0686 (0.1911) acc 100.0000 (95.0000) lr 4.6494e-04 eta 4:19:34
+[调度器验证] batch 120: 学习率=0.000938
+epoch [19/25] batch [120/200] time 28.426 (14.349) data 28.188 (14.112) loss 0.1847 (0.2068) acc 100.0000 (94.5833) lr 9.3774e-04 eta 5:06:06
+[调度器验证] batch 140: 学习率=0.001638
+epoch [19/25] batch [140/200] time 33.197 (16.717) data 32.957 (16.481) loss 0.2526 (0.2108) acc 75.0000 (94.4643) lr 1.6376e-03 eta 5:51:04
+[调度器验证] batch 160: 学习率=0.000032
+epoch [19/25] batch [160/200] time 37.965 (19.090) data 37.729 (18.853) loss 0.9914 (0.2235) acc 75.0000 (94.0625) lr 3.2401e-05 eta 6:34:31
+[调度器验证] batch 180: 学习率=0.001930
+epoch [19/25] batch [180/200] time 42.701 (21.464) data 42.465 (21.227) loss 0.4331 (0.2211) acc 100.0000 (94.4444) lr 1.9298e-03 eta 7:16:26
+[调度器验证] batch 200: 学习率=0.000363
+epoch [19/25] batch [200/200] time 47.410 (23.835) data 47.176 (23.598) loss 0.2741 (0.2267) acc 75.0000 (94.2500) lr 3.6339e-04 eta 7:56:41
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 3818}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-19
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.001063
+epoch [20/25] batch [20/200] time 4.720 (2.485) data 4.483 (2.249) loss 0.4378 (0.3389) acc 100.0000 (92.5000) lr 1.0633e-03 eta 0:48:52
+[调度器验证] batch 40: 学习率=0.001536
+epoch [20/25] batch [40/200] time 9.414 (4.835) data 9.179 (4.600) loss 0.0109 (0.2281) acc 100.0000 (94.3750) lr 1.5361e-03 eta 1:33:28
+[调度器验证] batch 60: 学习率=0.000071
+epoch [20/25] batch [60/200] time 14.080 (7.179) data 13.850 (6.945) loss 0.0016 (0.1809) acc 100.0000 (95.4167) lr 7.1188e-05 eta 2:16:24
+[调度器验证] batch 80: 学习率=0.001969
+epoch [20/25] batch [80/200] time 18.657 (9.504) data 18.430 (9.272) loss 0.0010 (0.1752) acc 100.0000 (95.6250) lr 1.9686e-03 eta 2:57:24
+[调度器验证] batch 100: 学习率=0.000363
+epoch [20/25] batch [100/200] time 23.336 (11.825) data 23.101 (11.592) loss 0.0313 (0.1914) acc 100.0000 (95.2500) lr 3.6339e-04 eta 3:36:47
+[调度器验证] batch 120: 学习率=0.001063
+epoch [20/25] batch [120/200] time 28.039 (14.154) data 27.805 (13.920) loss 0.0012 (0.2019) acc 100.0000 (94.5833) lr 1.0633e-03 eta 4:14:45
+[调度器验证] batch 140: 学习率=0.001536
+epoch [20/25] batch [140/200] time 32.772 (16.492) data 32.536 (16.258) loss 0.0336 (0.2041) acc 100.0000 (94.8214) lr 1.5361e-03 eta 4:51:21
+[调度器验证] batch 160: 学习率=0.000071
+epoch [20/25] batch [160/200] time 37.464 (18.835) data 37.230 (18.601) loss 0.0084 (0.1971) acc 100.0000 (94.8438) lr 7.1188e-05 eta 5:26:27
+[调度器验证] batch 180: 学习率=0.001969
+epoch [20/25] batch [180/200] time 42.188 (21.179) data 41.952 (20.946) loss 2.1702 (0.2008) acc 50.0000 (94.7222) lr 1.9686e-03 eta 6:00:03
+[调度器验证] batch 200: 学习率=0.000272
+epoch [20/25] batch [200/200] time 46.930 (23.529) data 46.691 (23.295) loss 1.0991 (0.1950) acc 75.0000 (94.8750) lr 2.7190e-04 eta 6:32:09
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 4019}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-20
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.001188
+epoch [21/25] batch [20/200] time 4.816 (2.534) data 4.577 (2.293) loss 0.3201 (0.1492) acc 75.0000 (96.2500) lr 1.1878e-03 eta 0:41:23
+[调度器验证] batch 40: 学习率=0.001426
+epoch [21/25] batch [40/200] time 9.582 (4.927) data 9.343 (4.688) loss 0.5671 (0.1929) acc 50.0000 (94.3750) lr 1.4261e-03 eta 1:18:49
+[调度器验证] batch 60: 学习率=0.000125
+epoch [21/25] batch [60/200] time 14.396 (7.323) data 14.156 (7.084) loss 0.0445 (0.1736) acc 100.0000 (95.0000) lr 1.2463e-04 eta 1:54:43
+[调度器验证] batch 80: 学习率=0.001992
+epoch [21/25] batch [80/200] time 19.203 (9.725) data 18.967 (9.485) loss 0.0652 (0.2488) acc 100.0000 (93.1250) lr 1.9921e-03 eta 2:29:06
+[调度器验证] batch 100: 学习率=0.000272
+epoch [21/25] batch [100/200] time 23.988 (12.122) data 23.753 (11.883) loss 0.0014 (0.2360) acc 100.0000 (93.2500) lr 2.7190e-04 eta 3:01:50
+[调度器验证] batch 120: 学习率=0.001188
+epoch [21/25] batch [120/200] time 28.750 (14.517) data 28.513 (14.278) loss 0.0038 (0.2389) acc 100.0000 (93.1250) lr 1.1878e-03 eta 3:32:54
+[调度器验证] batch 140: 学习率=0.001426
+epoch [21/25] batch [140/200] time 33.532 (16.909) data 33.295 (16.670) loss 0.5935 (0.2284) acc 75.0000 (93.3929) lr 1.4261e-03 eta 4:02:22
+[调度器验证] batch 160: 学习率=0.000125
+epoch [21/25] batch [160/200] time 38.293 (19.300) data 38.051 (19.061) loss 0.6856 (0.2156) acc 50.0000 (93.4375) lr 1.2463e-04 eta 4:30:12
+[调度器验证] batch 180: 学习率=0.001992
+epoch [21/25] batch [180/200] time 43.042 (21.688) data 42.805 (21.449) loss 0.0212 (0.2227) acc 100.0000 (93.3333) lr 1.9921e-03 eta 4:56:23
+[调度器验证] batch 200: 学习率=0.000192
+epoch [21/25] batch [200/200] time 47.819 (24.074) data 47.581 (23.836) loss 0.5438 (0.2454) acc 75.0000 (92.8750) lr 1.9189e-04 eta 5:20:59
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 4220}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-21
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.001309
+epoch [22/25] batch [20/200] time 4.714 (2.476) data 4.478 (2.241) loss 0.1229 (0.1718) acc 100.0000 (92.5000) lr 1.3094e-03 eta 0:32:11
+[调度器验证] batch 40: 学习率=0.001309
+epoch [22/25] batch [40/200] time 9.417 (4.828) data 9.180 (4.593) loss 0.3187 (0.2505) acc 75.0000 (91.2500) lr 1.3094e-03 eta 1:01:09
+[调度器验证] batch 60: 学习率=0.000192
+epoch [22/25] batch [60/200] time 14.134 (7.179) data 13.895 (6.944) loss 0.6229 (0.2264) acc 75.0000 (92.0833) lr 1.9189e-04 eta 1:28:32
+[调度器验证] batch 80: 学习率=0.002000
+epoch [22/25] batch [80/200] time 18.912 (9.545) data 18.673 (9.309) loss 0.4809 (0.2380) acc 75.0000 (92.1875) lr 2.0000e-03 eta 1:54:32
+[调度器验证] batch 100: 学习率=0.000192
+epoch [22/25] batch [100/200] time 23.673 (11.917) data 23.437 (11.681) loss 0.0058 (0.2354) acc 100.0000 (92.5000) lr 1.9189e-04 eta 2:19:02
+[调度器验证] batch 120: 学习率=0.001309
+epoch [22/25] batch [120/200] time 28.438 (14.294) data 28.200 (14.057) loss 0.0955 (0.2399) acc 100.0000 (92.0833) lr 1.3094e-03 eta 2:41:59
+[调度器验证] batch 140: 学习率=0.001309
+epoch [22/25] batch [140/200] time 33.189 (16.670) data 32.956 (16.434) loss 0.2035 (0.2308) acc 75.0000 (92.3214) lr 1.3094e-03 eta 3:03:22
+[调度器验证] batch 160: 学习率=0.000192
+epoch [22/25] batch [160/200] time 37.949 (19.047) data 37.709 (18.810) loss 0.0104 (0.2513) acc 100.0000 (91.7188) lr 1.9189e-04 eta 3:23:10
+[调度器验证] batch 180: 学习率=0.002000
+epoch [22/25] batch [180/200] time 42.708 (21.425) data 42.471 (21.188) loss 0.0039 (0.2383) acc 100.0000 (92.2222) lr 2.0000e-03 eta 3:41:23
+[调度器验证] batch 200: 学习率=0.000125
+epoch [22/25] batch [200/200] time 47.461 (23.802) data 47.226 (23.565) loss 0.0002 (0.2391) acc 100.0000 (92.2500) lr 1.2463e-04 eta 3:58:01
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 4421}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-22
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.001426
+epoch [23/25] batch [20/200] time 4.740 (2.498) data 4.503 (2.261) loss 0.0313 (0.2520) acc 100.0000 (92.5000) lr 1.4261e-03 eta 0:24:08
+[调度器验证] batch 40: 学习率=0.001188
+epoch [23/25] batch [40/200] time 9.456 (4.856) data 9.220 (4.620) loss 0.0565 (0.2494) acc 100.0000 (90.6250) lr 1.1878e-03 eta 0:45:19
+[调度器验证] batch 60: 学习率=0.000272
+epoch [23/25] batch [60/200] time 14.219 (7.221) data 13.971 (6.984) loss 0.0001 (0.2354) acc 100.0000 (91.6667) lr 2.7190e-04 eta 1:04:59
+[调度器验证] batch 80: 学习率=0.001992
+epoch [23/25] batch [80/200] time 18.959 (9.593) data 18.723 (9.357) loss 0.0343 (0.2418) acc 100.0000 (91.5625) lr 1.9921e-03 eta 1:23:08
+[调度器验证] batch 100: 学习率=0.000125
+epoch [23/25] batch [100/200] time 23.717 (11.966) data 23.482 (11.729) loss 0.7342 (0.2298) acc 75.0000 (92.0000) lr 1.2463e-04 eta 1:39:42
+[调度器验证] batch 120: 学习率=0.001426
+epoch [23/25] batch [120/200] time 28.478 (14.342) data 28.240 (14.105) loss 0.0303 (0.2120) acc 100.0000 (92.9167) lr 1.4261e-03 eta 1:54:44
+[调度器验证] batch 140: 学习率=0.001188
+epoch [23/25] batch [140/200] time 33.246 (16.718) data 33.003 (16.481) loss 0.0050 (0.2046) acc 100.0000 (93.0357) lr 1.1878e-03 eta 2:08:10
+[调度器验证] batch 160: 学习率=0.000272
+epoch [23/25] batch [160/200] time 38.005 (19.097) data 37.767 (18.860) loss 0.3741 (0.1959) acc 75.0000 (93.4375) lr 2.7190e-04 eta 2:20:02
+[调度器验证] batch 180: 学习率=0.001992
+epoch [23/25] batch [180/200] time 42.751 (21.475) data 42.515 (21.238) loss 0.4863 (0.2125) acc 75.0000 (93.3333) lr 1.9921e-03 eta 2:30:19
+[调度器验证] batch 200: 学习率=0.000071
+epoch [23/25] batch [200/200] time 47.501 (23.851) data 47.263 (23.614) loss 1.1354 (0.2295) acc 75.0000 (93.0000) lr 7.1188e-05 eta 2:39:00
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 4622}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-23
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.001536
+epoch [24/25] batch [20/200] time 4.811 (2.520) data 4.568 (2.280) loss 0.0072 (0.1454) acc 100.0000 (95.0000) lr 1.5361e-03 eta 0:15:57
+[调度器验证] batch 40: 学习率=0.001063
+epoch [24/25] batch [40/200] time 9.618 (4.928) data 9.374 (4.688) loss 0.0002 (0.1168) acc 100.0000 (96.8750) lr 1.0633e-03 eta 0:29:33
+[调度器验证] batch 60: 学习率=0.000363
+epoch [24/25] batch [60/200] time 14.430 (7.336) data 14.188 (7.096) loss 0.7137 (0.1732) acc 75.0000 (95.0000) lr 3.6339e-04 eta 0:41:34
+[调度器验证] batch 80: 学习率=0.001969
+epoch [24/25] batch [80/200] time 19.296 (9.749) data 19.055 (9.508) loss 0.0066 (0.2211) acc 100.0000 (93.4375) lr 1.9686e-03 eta 0:51:59
+[调度器验证] batch 100: 学习率=0.000071
+epoch [24/25] batch [100/200] time 24.146 (12.170) data 23.905 (11.929) loss 0.0072 (0.2125) acc 100.0000 (93.7500) lr 7.1188e-05 eta 1:00:50
+[调度器验证] batch 120: 学习率=0.001536
+epoch [24/25] batch [120/200] time 28.980 (14.590) data 28.737 (14.349) loss 0.0139 (0.2031) acc 100.0000 (94.1667) lr 1.5361e-03 eta 1:08:05
+[调度器验证] batch 140: 学习率=0.001063
+epoch [24/25] batch [140/200] time 33.784 (17.006) data 33.547 (16.766) loss 0.4963 (0.2060) acc 75.0000 (93.9286) lr 1.0633e-03 eta 1:13:41
+[调度器验证] batch 160: 学习率=0.000363
+epoch [24/25] batch [160/200] time 38.617 (19.420) data 38.373 (19.179) loss 0.0715 (0.2044) acc 100.0000 (94.0625) lr 3.6339e-04 eta 1:17:40
+[调度器验证] batch 180: 学习率=0.001969
+epoch [24/25] batch [180/200] time 43.564 (21.839) data 43.325 (21.598) loss 0.0011 (0.2020) acc 100.0000 (94.0278) lr 1.9686e-03 eta 1:20:04
+[调度器验证] batch 200: 学习率=0.000032
+epoch [24/25] batch [200/200] time 48.371 (24.265) data 48.134 (24.023) loss 0.0781 (0.2249) acc 100.0000 (93.7500) lr 3.2401e-05 eta 1:20:52
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 4823}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-24
+train_loader_x长度（batch数）: 200
+单个batch样本数: 4
+训练集总样本数: 200
+当前使用的调度器: CosineAnnealingLR
+[调度器验证] batch 20: 学习率=0.001638
+epoch [25/25] batch [20/200] time 4.781 (2.515) data 4.544 (2.277) loss 0.0002 (0.1046) acc 100.0000 (96.2500) lr 1.6376e-03 eta 0:07:32
+[调度器验证] batch 40: 学习率=0.000938
+epoch [25/25] batch [40/200] time 9.543 (4.898) data 9.308 (4.660) loss 0.2785 (0.2217) acc 100.0000 (93.1250) lr 9.3774e-04 eta 0:13:03
+[调度器验证] batch 60: 学习率=0.000465
+epoch [25/25] batch [60/200] time 14.298 (7.278) data 14.061 (7.040) loss 0.0254 (0.2062) acc 100.0000 (94.1667) lr 4.6494e-04 eta 0:16:58
+[调度器验证] batch 80: 学习率=0.001930
+epoch [25/25] batch [80/200] time 19.096 (9.661) data 18.856 (9.423) loss 0.0003 (0.1894) acc 100.0000 (94.3750) lr 1.9298e-03 eta 0:19:19
+[调度器验证] batch 100: 学习率=0.000032
+epoch [25/25] batch [100/200] time 23.875 (12.051) data 23.637 (11.812) loss 0.2674 (0.1872) acc 75.0000 (94.5000) lr 3.2401e-05 eta 0:20:05
+[调度器验证] batch 120: 学习率=0.001638
+epoch [25/25] batch [120/200] time 28.626 (14.436) data 28.384 (14.198) loss 0.0334 (0.2059) acc 100.0000 (94.3750) lr 1.6376e-03 eta 0:19:14
+[调度器验证] batch 140: 学习率=0.000938
+epoch [25/25] batch [140/200] time 33.419 (16.824) data 33.182 (16.585) loss 0.0586 (0.1978) acc 100.0000 (94.6429) lr 9.3774e-04 eta 0:16:49
+[调度器验证] batch 160: 学习率=0.000465
+epoch [25/25] batch [160/200] time 38.187 (19.210) data 37.949 (18.972) loss 0.9335 (0.2090) acc 75.0000 (94.3750) lr 4.6494e-04 eta 0:12:48
+[调度器验证] batch 180: 学习率=0.001930
+epoch [25/25] batch [180/200] time 42.975 (21.599) data 42.736 (21.361) loss 0.1305 (0.2037) acc 100.0000 (94.3056) lr 1.9298e-03 eta 0:07:11
+[调度器验证] batch 200: 学习率=0.000009
+epoch [25/25] batch [200/200] time 47.722 (23.986) data 47.487 (23.748) loss 0.0379 (0.1912) acc 100.0000 (94.6250) lr 8.8814e-06 eta 0:00:00
+保存调度器 prompt_learner 的手动状态: {'last_epoch': 5024}
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed2/prompt_learner/model.pth.tar-25
+训练完成
+加载最后一轮模型
+=== 验证类别列表 ===
+
+在 *test* 集上评估
+=> result
+* total: 1,549
+* correct: 1,490
+* accuracy: 96.191%
+* error: 3.81%
+* macro_f1: 93.94%
+耗时: 0:20:17

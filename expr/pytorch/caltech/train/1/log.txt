@@ -1,0 +1,288 @@
+***************
+** Arguments **
+***************
+backbone: 
+config_file: configs/trainers/CoOp/vit_b16.yaml
+dataset_config_file: configs/datasets/caltech101.yaml
+eval_only: False
+head: 
+load_epoch: None
+model_dir: 
+no_train: False
+opts: ['TRAINER.COOP.N_CTX', '4', 'TRAINER.COOP.CSC', 'False', 'TRAINER.COOP.CLASS_TOKEN_POSITION', 'end', 'DATASET.NUM_SHOTS', '16', 'DATASET.SUBSAMPLE_CLASSES', 'base', 'TRAINER.ATPROMPT.USE_ATPROMPT', 'True', 'TRAINER.ATPROMPT.N_ATT1', '4', 'TRAINER.ATPROMPT.N_ATT2', '4', 'TRAINER.ATPROMPT.N_ATT3', '4', 'OPTIM.MAX_EPOCH', '25', 'TRAIN.CHECKPOINT_FREQ', '1']
+output_dir: output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed1
+resume: 
+root: /root/prompt_dataset
+seed: 1
+source_domains: None
+target_domains: None
+trainer: CoOp_ATP
+transforms: None
+************
+** Config **
+************
+DATALOADER:
+  K_TRANSFORMS: 1
+  NUM_WORKERS: 8
+  RETURN_IMG0: False
+  TEST:
+    BATCH_SIZE: 50
+    SAMPLER: SequentialSampler
+  TRAIN_U:
+    BATCH_SIZE: 32
+    N_DOMAIN: 0
+    N_INS: 16
+    SAME_AS_X: True
+    SAMPLER: RandomSampler
+  TRAIN_X:
+    BATCH_SIZE: 32
+    N_DOMAIN: 0
+    N_INS: 16
+    SAMPLER: RandomSampler
+DATASET:
+  ALL_AS_UNLABELED: False
+  CIFAR_C_LEVEL: 1
+  CIFAR_C_TYPE: 
+  NAME: Caltech101
+  NUM_LABELED: -1
+  NUM_SHOTS: 16
+  ROOT: /root/prompt_dataset
+  SOURCE_DOMAINS: ()
+  STL10_FOLD: -1
+  SUBSAMPLE_CLASSES: base
+  TARGET_DOMAINS: ()
+  VAL_PERCENT: 0.1
+INPUT:
+  COLORJITTER_B: 0.4
+  COLORJITTER_C: 0.4
+  COLORJITTER_H: 0.1
+  COLORJITTER_S: 0.4
+  CROP_PADDING: 4
+  CUTOUT_LEN: 16
+  CUTOUT_N: 1
+  GB_K: 21
+  GB_P: 0.5
+  GN_MEAN: 0.0
+  GN_STD: 0.15
+  INTERPOLATION: bicubic
+  NO_TRANSFORM: False
+  PIXEL_MEAN: [0.48145466, 0.4578275, 0.40821073]
+  PIXEL_STD: [0.26862954, 0.26130258, 0.27577711]
+  RANDAUGMENT_M: 10
+  RANDAUGMENT_N: 2
+  RGS_P: 0.2
+  RRCROP_SCALE: (0.08, 1.0)
+  SIZE: (224, 224)
+  TRANSFORMS: ('random_resized_crop', 'random_flip', 'normalize')
+MODEL:
+  BACKBONE:
+    NAME: ViT-B/16
+    PRETRAINED: True
+  HEAD:
+    ACTIVATION: relu
+    BN: True
+    DROPOUT: 0.0
+    HIDDEN_LAYERS: ()
+    NAME: 
+  INIT_WEIGHTS: 
+OPTIM:
+  ADAM_BETA1: 0.9
+  ADAM_BETA2: 0.999
+  BASE_LR_MULT: 0.1
+  GAMMA: 0.1
+  LR: 0.002
+  LR_SCHEDULER: cosine
+  MAX_EPOCH: 25
+  MOMENTUM: 0.9
+  NAME: sgd
+  NEW_LAYERS: ()
+  RMSPROP_ALPHA: 0.99
+  SGD_DAMPNING: 0
+  SGD_NESTEROV: False
+  STAGED_LR: False
+  STEPSIZE: (-1,)
+  WARMUP_CONS_LR: 1e-05
+  WARMUP_EPOCH: 1
+  WARMUP_MIN_LR: 1e-05
+  WARMUP_RECOUNT: True
+  WARMUP_TYPE: constant
+  WEIGHT_DECAY: 0.0005
+OUTPUT_DIR: output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed1
+RESUME: 
+SEED: 1
+TEST:
+  COMPUTE_CMAT: False
+  EVALUATOR: Classification
+  FINAL_MODEL: last_step
+  NO_TEST: False
+  PER_CLASS_RESULT: False
+  SPLIT: test
+TRAIN:
+  CHECKPOINT_FREQ: 1
+  COUNT_ITER: train_x
+  PRINT_FREQ: 20
+TRAINER:
+  ATPROMPT:
+    ATT1_TEXT: shape
+    ATT2_TEXT: size
+    ATT3_TEXT: none
+    ATT_NUM: 2
+    N_ATT1: 4
+    N_ATT2: 4
+    N_ATT3: 4
+    USE_ATPROMPT: True
+  CDAC:
+    CLASS_LR_MULTI: 10
+    P_THRESH: 0.95
+    RAMPUP_COEF: 30
+    RAMPUP_ITRS: 1000
+    STRONG_TRANSFORMS: ()
+    TOPK_MATCH: 5
+  COCOOP:
+    CTX_INIT: 
+    N_CTX: 16
+    PREC: fp16
+  COOP:
+    CLASS_TOKEN_POSITION: end
+    CSC: False
+    CTX_INIT: False
+    N_CTX: 4
+    PREC: fp16
+    W: 2.0
+  CROSSGRAD:
+    ALPHA_D: 0.5
+    ALPHA_F: 0.5
+    EPS_D: 1.0
+    EPS_F: 1.0
+  DAEL:
+    CONF_THRE: 0.95
+    STRONG_TRANSFORMS: ()
+    WEIGHT_U: 0.5
+  DAELDG:
+    CONF_THRE: 0.95
+    STRONG_TRANSFORMS: ()
+    WEIGHT_U: 0.5
+  DDAIG:
+    ALPHA: 0.5
+    CLAMP: False
+    CLAMP_MAX: 1.0
+    CLAMP_MIN: -1.0
+    G_ARCH: 
+    LMDA: 0.3
+    WARMUP: 0
+  DOMAINMIX:
+    ALPHA: 1.0
+    BETA: 1.0
+    TYPE: crossdomain
+  ENTMIN:
+    LMDA: 0.001
+  FILM:
+    LINEAR_PROBE: True
+  FIXMATCH:
+    CONF_THRE: 0.95
+    STRONG_TRANSFORMS: ()
+    WEIGHT_U: 1.0
+  IVLP:
+    CTX_INIT: a photo of a
+    IMG_WEIGHT: 0.5
+    N_CTX_TEXT: 2
+    N_CTX_VISION: 2
+    PREC: fp16
+    PROMPT_DEPTH_TEXT: 9
+    PROMPT_DEPTH_VISION: 9
+  LINEAR_PROBE:
+    TEST_TIME_FUSION: True
+    TYPE: linear
+    WEIGHT: 0.7
+  M3SDA:
+    LMDA: 0.5
+    N_STEP_F: 4
+  MAPLE:
+    CTX_INIT: a photo of a
+    N_CTX: 2
+    PREC: fp16
+    PROMPT_DEPTH: 9
+  MCD:
+    N_STEP_F: 4
+  MEANTEACHER:
+    EMA_ALPHA: 0.999
+    RAMPUP: 5
+    WEIGHT_U: 1.0
+  MIXMATCH:
+    MIXUP_BETA: 0.75
+    RAMPUP: 20000
+    TEMP: 2.0
+    WEIGHT_U: 100.0
+  MME:
+    LMDA: 0.1
+  NAME: CoOp_ATP
+  NAMES_TO_UPDATE: ['prompt_learner', 'linear_probe', 'film']
+  PROMPTSRC:
+    CTX_INIT: 
+    GPA_MEAN: 15
+    GPA_STD: 1
+    IMAGE_LOSS_WEIGHT: 10
+    N_CTX_TEXT: 4
+    N_CTX_VISION: 4
+    PREC: fp16
+    PROMPT_DEPTH_TEXT: 9
+    PROMPT_DEPTH_VISION: 9
+    TEXT_LOSS_WEIGHT: 25
+  SE:
+    CONF_THRE: 0.95
+    EMA_ALPHA: 0.999
+    RAMPUP: 300
+USE_CUDA: True
+VERBOSE: True
+VERSION: 1
+DEBUG: print_args finished, start build_trainer
+DEBUG: eval_only = False
+DEBUG: model_dir = 
+DEBUG: load_epoch = None
+Loading trainer: CoOp_ATP
+Loading dataset: Caltech101
+Reading split from /root/prompt_dataset/caltech-101/split_zhou_Caltech101.json
+Loading preprocessed few-shot data from /root/prompt_dataset/caltech-101/split_fewshot/shot_16-seed_1.pkl
+SUBSAMPLE BASE CLASSES!
+Building transform_train
++ random resized crop (size=(224, 224), scale=(0.08, 1.0))
++ random flip
++ to torch tensor of range [0, 1]
++ normalization (mean=[0.48145466, 0.4578275, 0.40821073], std=[0.26862954, 0.26130258, 0.27577711])
+Building transform_test
++ resize the smaller edge to 224
++ 224x224 center crop
++ to torch tensor of range [0, 1]
++ normalization (mean=[0.48145466, 0.4578275, 0.40821073], std=[0.26862954, 0.26130258, 0.27577711])
+框架: PyTorch
+train_x 原始长度: 800
+test 原始长度: 1549
+train_loader_x 长度（batch数）: 25
+test_loader 长度（batch数）: 31
+---------  ----------
+Dataset    Caltech101
+# classes  50
+# train_x  800
+# val      200
+# test     1,549
+---------  ----------
+Loading CLIP (backbone: ViT-B/16)
+build model vit is True
+Building custom CLIP
+Initializing a generic context
+self.use_atp is True
+self.atp_num is 2
+Initial context: "X X X X"
+Number of context words (tokens): 4
+USE ATPROPMT-ING 1
+['X X X X shape X X X X size X X X X face.', 'X X X X shape X X X X size X X X X leopard.', 'X X X X shape X X X X size X X X X motorbike.', 'X X X X shape X X X X size X X X X accordion.', 'X X X X shape X X X X size X X X X airplane.', 'X X X X shape X X X X size X X X X anchor.', 'X X X X shape X X X X size X X X X ant.', 'X X X X shape X X X X size X X X X barrel.', 'X X X X shape X X X X size X X X X bass.', 'X X X X shape X X X X size X X X X beaver.', 'X X X X shape X X X X size X X X X binocular.', 'X X X X shape X X X X size X X X X bonsai.', 'X X X X shape X X X X size X X X X brain.', 'X X X X shape X X X X size X X X X brontosaurus.', 'X X X X shape X X X X size X X X X buddha.', 'X X X X shape X X X X size X X X X butterfly.', 'X X X X shape X X X X size X X X X camera.', 'X X X X shape X X X X size X X X X cannon.', 'X X X X shape X X X X size X X X X car side.', 'X X X X shape X X X X size X X X X ceiling fan.', 'X X X X shape X X X X size X X X X cellphone.', 'X X X X shape X X X X size X X X X chair.', 'X X X X shape X X X X size X X X X chandelier.', 'X X X X shape X X X X size X X X X cougar body.', 'X X X X shape X X X X size X X X X cougar face.', 'X X X X shape X X X X size X X X X crab.', 'X X X X shape X X X X size X X X X crayfish.', 'X X X X shape X X X X size X X X X crocodile.', 'X X X X shape X X X X size X X X X crocodile head.', 'X X X X shape X X X X size X X X X cup.', 'X X X X shape X X X X size X X X X dalmatian.', 'X X X X shape X X X X size X X X X dollar bill.', 'X X X X shape X X X X size X X X X dolphin.', 'X X X X shape X X X X size X X X X dragonfly.', 'X X X X shape X X X X size X X X X electric guitar.', 'X X X X shape X X X X size X X X X elephant.', 'X X X X shape X X X X size X X X X emu.', 'X X X X shape X X X X size X X X X euphonium.', 'X X X X shape X X X X size X X X X ewer.', 'X X X X shape X X X X size X X X X ferry.', 'X X X X shape X X X X size X X X X flamingo.', 'X X X X shape X X X X size X X X X flamingo head.', 'X X X X shape X X X X size X X X X garfield.', 'X X X X shape X X X X size X X X X gerenuk.', 'X X X X shape X X X X size X X X X gramophone.', 'X X X X shape X X X X size X X X X grand piano.', 'X X X X shape X X X X size X X X X hawksbill.', 'X X X X shape X X X X size X X X X headphone.', 'X X X X shape X X X X size X X X X hedgehog.', 'X X X X shape X X X X size X X X X helicopter.']
+embedding size is torch.Size([50, 77, 512])
+USE ATPROPMT-ING 2
+Turning off gradients in both the image and the text encoder
+Loading evaluator: Classification
+DEBUG: build_trainer finished, start check eval_only
+No checkpoint found, train from scratch
+epoch [1/25] batch [20/25] time 0.706 (0.780) data 0.000 (0.042) loss 0.4395 (1.1834) acc 93.7500 (70.0000) lr 1.0000e-05 eta 0:07:52
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed1/prompt_learner/model.pth.tar-1
+epoch [2/25] batch [20/25] time 0.707 (0.728) data 0.000 (0.020) loss 0.4731 (0.5629) acc 84.3750 (83.7500) lr 2.0000e-03 eta 0:07:02
+Checkpoint saved to output/caltech101/CoOp_ATP/vit_b16_16shots/nctx4_cscFalse_ctpend/CTX_4_epo_25/seed1/prompt_learner/model.pth.tar-2
